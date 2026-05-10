@@ -42,12 +42,7 @@ body::before {
   pointer-events: none;
   background:
     linear-gradient(rgba(255, 255, 255, 0.028) 50%, transparent 50%),
-    linear-gradient(
-      90deg,
-      rgba(255, 0, 0, 0.018),
-      rgba(0, 255, 120, 0.018),
-      rgba(0, 80, 255, 0.018)
-    );
+    linear-gradient(90deg, rgba(255, 0, 0, 0.018), rgba(0, 255, 120, 0.018), rgba(0, 80, 255, 0.018));
   background-size: 100% 4px, 8px 100%;
   mix-blend-mode: screen;
   opacity: 0.24;
@@ -59,22 +54,8 @@ body::after {
   inset: 0;
   z-index: 59;
   pointer-events: none;
-  background: radial-gradient(
-    circle at center,
-    transparent 45%,
-    rgba(0, 0, 0, 0.45) 100%
-  );
-}
-
-.xp-wallpaper {
   background:
-    linear-gradient(
-      180deg,
-      #62b5ff 0%,
-      #3d8df2 36%,
-      #7fd24d 37%,
-      #4ea526 100%
-    );
+    radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.45) 100%);
 }
 
 .glitch-text {
