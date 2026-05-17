@@ -260,9 +260,18 @@ export function TateDesktop() {
     "links",
   ]);
   const [startOpen, setStartOpen] = useState(false);
+  const [isXpNoteVisible, setIsXpNoteVisible] = useState(true);
 
   function toggleTheme() {
-    setTheme((current) => (current === "matrix" ? "xp" : "matrix"));
+    setTheme((current) => {
+      const nextTheme = current === "matrix" ? "xp" : "matrix";
+
+      if (nextTheme === "xp") {
+        setIsXpNoteVisible(true);
+      }
+
+      return nextTheme;
+    });
     setStartOpen(false);
   }
 
@@ -443,6 +452,18 @@ export function TateDesktop() {
       window.removeEventListener("keydown", handleGlobalKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    if (theme !== "xp" || !entered || !isXpNoteVisible) return;
+
+    const timer = window.setTimeout(() => {
+      setIsXpNoteVisible(false);
+    }, 60000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [entered, isXpNoteVisible, theme]);
 
   if (!entered) {
     return (
@@ -685,6 +706,8 @@ export function TateDesktop() {
             shortcuts={desktopShortcuts}
             openWindows={openWindows}
             activeWindow={activeWindow}
+            isXpNoteVisible={isXpNoteVisible}
+            onDismissXpNote={() => setIsXpNoteVisible(false)}
             onOpenWindow={openWindow}
             onFocusWindow={setActiveWindow}
             onCloseWindow={closeWindow}
@@ -866,6 +889,8 @@ function XPDesktop({
   shortcuts,
   openWindows,
   activeWindow,
+  isXpNoteVisible,
+  onDismissXpNote,
   onOpenWindow,
   onFocusWindow,
   onCloseWindow,
@@ -875,6 +900,8 @@ function XPDesktop({
   shortcuts: DesktopShortcut[];
   openWindows: WindowId[];
   activeWindow: WindowId;
+  isXpNoteVisible: boolean;
+  onDismissXpNote: () => void;
   onOpenWindow: (id: WindowId) => void;
   onFocusWindow: (id: WindowId) => void;
   onCloseWindow: (id: WindowId) => void;
@@ -890,7 +917,7 @@ function XPDesktop({
       </div>
 
       <section className="relative ml-0 min-h-[calc(100vh-7rem)] rounded-xl border border-white/25 bg-white/5 p-3 shadow-inner sm:ml-36">
-        <XPStickyNote />
+        {isXpNoteVisible && <XPStickyNote onDismiss={onDismissXpNote} />}
 
         {openWindows.length === 0 && (
           <div className="absolute left-1/2 top-1/2 max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-[#1847a3] bg-[#ece9d8] p-6 text-center shadow-2xl">
@@ -1124,6 +1151,10 @@ function TerminalContent({
           type: "output",
           text: "xp, matrix, lltech, youtube, gaming youtube, tech youtube, facebook, tiktok, linkedin",
         },
+        {
+          type: "output",
+          text: "shortcuts: try `open all`, `home`, or `sudo make me famous`",
+        },
       );
     } else if (normalized === "ls" || normalized === "dir") {
       output.push(
@@ -1208,6 +1239,22 @@ function TerminalContent({
     } else if (normalized === "close contact") {
       onCloseWindow("contact");
       output.push({ type: "success", text: "Closed open-channel.mail." });
+    } else if (normalized === "open all" || normalized === "launch all") {
+      onOpenWindow("terminal");
+      onOpenWindow("links");
+      onOpenWindow("projects");
+      onOpenWindow("creator");
+      onOpenWindow("contact");
+      output.push({
+        type: "success",
+        text: "Opened all Tate OS windows.",
+      });
+    } else if (normalized === "home" || normalized === "dashboard") {
+      onOpenWindow("terminal");
+      output.push({
+        type: "success",
+        text: "Dashboard command acknowledged. Terminal is active.",
+      });
     } else if (
       normalized === "close all" ||
       normalized === "kill all" ||
@@ -1902,20 +1949,44 @@ function LiveClock({ theme }: { theme: ThemeMode }) {
   );
 }
 
-function XPStickyNote() {
+function XPStickyNote({ onDismiss }: { onDismiss: () => void }) {
   return (
-    <div className="absolute right-5 top-5 z-20 hidden w-72 rotate-1 rounded-xl border border-yellow-600/30 bg-[#fff6a8] p-4 text-[#3a2f00] shadow-2xl lg:block">
-      <p className="text-sm font-black uppercase tracking-[0.14em]">
-        System Notes
-      </p>
-      <p className="mt-3 text-sm leading-6">
+    <aside
+      className="absolute right-5 top-5 z-20 hidden w-72 rotate-1 rounded-xl border border-yellow-600/30 bg-[#fff6a8] p-4 text-[#3a2f00] shadow-2xl transition hover:rotate-0 lg:block"
+      aria-label="Tate XP system notes"
+    >
+      <div className="mb-3 flex items-start justify-between gap-4">
+        <p className="text-sm font-black uppercase tracking-[0.14em]">
+          System Notes
+        </p>
+
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onDismiss();
+          }}
+          className="grid size-7 shrink-0 place-items-center rounded-lg border border-yellow-900/20 bg-yellow-950/10 text-sm font-black text-[#5d4c00] transition hover:bg-yellow-950/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-700/35"
+          aria-label="Close system notes"
+          title="Close system notes"
+        >
+          ×
+        </button>
+      </div>
+
+      <p className="text-sm leading-6">
         Welcome to Tate XP. Click desktop icons, open windows, close apps, use
         the terminal, check links, and try not to delete the internet.
       </p>
+
       <p className="mt-4 font-mono text-xs text-[#6b5a00]">
         note: links are grouped like a real system directory
       </p>
-    </div>
+
+      <p className="mt-3 border-t border-yellow-900/15 pt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#7a6500]">
+        auto-closes after 60 seconds
+      </p>
+    </aside>
   );
 }
 
