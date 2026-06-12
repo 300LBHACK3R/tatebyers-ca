@@ -1272,7 +1272,6 @@ function TerminalContent({
       normalized === "matrix" ||
       normalized === "matrix mode"
     ) {
-      setTheme("xp");
       output.push({
         type: "success",
         text: "Tate XP is the default shell. Matrix mode has been disabled.",
