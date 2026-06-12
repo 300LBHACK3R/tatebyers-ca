@@ -20,12 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type {
-  ComponentType,
-  FormEvent,
-  MouseEvent,
-  ReactNode,
-} from "react";
+import type { ComponentType, MouseEvent, ReactNode } from "react";
 
 type ThemeMode = "matrix" | "xp";
 type WindowId = "terminal" | "links" | "projects" | "creator" | "contact";
@@ -51,7 +46,6 @@ type ExternalLink = {
   description: string;
   href: string;
   icon: ComponentType<{ className?: string }>;
-  windowId?: WindowId;
 };
 
 type LinkGroup = {
@@ -74,20 +68,11 @@ type TerminalLine = {
   text: string;
 };
 
-type ContactFormState = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  website: string;
-};
-
-type ContactSubmitStatus = "idle" | "submitting" | "success" | "error";
-
 const SOCIAL_URLS = {
   llTech: "https://lltechsolutions.ca",
   youtubeMain: "https://youtube.com/@LLTechSolutions/videos",
-  youtubeGaming: "https://www.youtube.com/@Tate-byers/videos",
+  youtubeGaming: "https://youtube.com/@LLTechSolutions/videos",
+  youtubeTech: "https://youtube.com/@LLTechSolutions/videos",
   facebook: "https://www.facebook.com/profile.php?id=61557129795810",
   tiktok: "https://www.tiktok.com/@lltechsolutions",
   linkedin: "https://www.linkedin.com/in/tatebyers/",
@@ -148,7 +133,7 @@ const linkGroups: LinkGroup[] = [
     title: "YouTube Network",
     systemName: "VIDEO_ARCHIVE",
     description:
-      "YouTube channels, long-form videos, project logs, gaming uploads, and creator media.",
+      "YouTube channels, long-form videos, project logs, gaming uploads, and tech media.",
     links: [
       {
         title: "L&L Tech Solutions YouTube",
@@ -165,6 +150,14 @@ const linkGroups: LinkGroup[] = [
           "Gaming clips, highlights, uploads, future streams, and creator experiments.",
         href: SOCIAL_URLS.youtubeGaming,
         icon: Gamepad2,
+      },
+      {
+        title: "Tech / Builds YouTube",
+        label: "TECH_MEDIA",
+        description:
+          "Website builds, technical projects, repairs, tutorials, and behind-the-scenes work.",
+        href: SOCIAL_URLS.youtubeTech,
+        icon: Monitor,
       },
     ],
   },
@@ -210,9 +203,8 @@ const linkGroups: LinkGroup[] = [
         label: "DIRECT_CONTACT",
         description:
           "Business, websites, tech work, collaborations, creator ideas, or project questions.",
-        href: "#contact",
+        href: SOCIAL_URLS.email,
         icon: Mail,
-        windowId: "contact",
       },
     ],
   },
@@ -1030,7 +1022,7 @@ function WindowLayer({
           onFocus={() => onFocusWindow("links")}
           onClose={() => onCloseWindow("links")}
         >
-          <LinksContent theme={theme} onOpenWindow={onOpenWindow} />
+          <LinksContent theme={theme} />
         </OSWindow>
       )}
 
@@ -1157,7 +1149,7 @@ function TerminalContent({
         },
         {
           type: "output",
-          text: "xp, matrix, lltech, youtube, gaming youtube, facebook, tiktok, linkedin",
+          text: "xp, matrix, lltech, youtube, gaming youtube, tech youtube, facebook, tiktok, linkedin",
         },
         {
           type: "output",
@@ -1317,6 +1309,16 @@ function TerminalContent({
         type: "success",
         text: "Opening gaming YouTube in a new tab.",
       });
+    } else if (
+      normalized === "tech youtube" ||
+      normalized === "builds youtube" ||
+      normalized === "open tech youtube"
+    ) {
+      openExternal(SOCIAL_URLS.youtubeTech);
+      output.push({
+        type: "success",
+        text: "Opening tech/builds YouTube in a new tab.",
+      });
     } else if (normalized === "facebook" || normalized === "open facebook") {
       openExternal(SOCIAL_URLS.facebook);
       output.push({ type: "success", text: "Opening Facebook in a new tab." });
@@ -1424,13 +1426,7 @@ function TerminalContent({
   );
 }
 
-function LinksContent({
-  theme,
-  onOpenWindow,
-}: {
-  theme: ThemeMode;
-  onOpenWindow: (id: WindowId) => void;
-}) {
+function LinksContent({ theme }: { theme: ThemeMode }) {
   return (
     <div className="grid gap-5">
       {linkGroups.map((group) => (
@@ -1488,15 +1484,9 @@ function LinksContent({
                 <a
                   key={item.title}
                   href={item.href}
-                  target={isMail || item.windowId ? undefined : "_blank"}
-                  rel={isMail || item.windowId ? undefined : "noopener noreferrer"}
+                  target={isMail ? undefined : "_blank"}
+                  rel={isMail ? undefined : "noopener noreferrer"}
                   aria-label={`Open ${item.title}`}
-                  onClick={(event) => {
-                    if (!item.windowId) return;
-
-                    event.preventDefault();
-                    onOpenWindow(item.windowId);
-                  }}
                   className={cx(
                     "group rounded-xl border p-4 transition hover:-translate-y-0.5",
                     theme === "matrix"
@@ -1711,108 +1701,7 @@ function CreatorTag({ label, theme }: { label: string; theme: ThemeMode }) {
   );
 }
 
-function getContactInputClassName(theme: ThemeMode) {
-  return cx(
-    "w-full rounded-xl border px-4 py-3 text-sm outline-none transition placeholder:text-current/35 focus:ring-2",
-    theme === "matrix"
-      ? "border-green-400/15 bg-black/35 text-green-100 focus:border-green-300/45 focus:ring-green-300/20"
-      : "border-[#b5b09a] bg-white text-[#1d1d1d] focus:border-[#174bb8] focus:ring-[#174bb8]/20",
-  );
-}
-
-function getContactLabelClassName(theme: ThemeMode) {
-  return cx(
-    "mb-2 block font-mono text-[10px] font-black uppercase tracking-[0.18em]",
-    theme === "matrix" ? "text-green-500" : "text-[#486e21]",
-  );
-}
-
 function ContactContent({ theme }: { theme: ThemeMode }) {
-  const [form, setForm] = useState<ContactFormState>({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-    website: "",
-  });
-  const [status, setStatus] = useState<ContactSubmitStatus>("idle");
-  const [feedback, setFeedback] = useState(
-    "Send a message directly through Tate OS. No local email app required.",
-  );
-
-  const isSubmitting = status === "submitting";
-
-  function updateField(field: keyof ContactFormState, value: string) {
-    setForm((current) => ({
-      ...current,
-      [field]: value,
-    }));
-
-    if (status !== "idle") {
-      setStatus("idle");
-      setFeedback(
-        "Send a message directly through Tate OS. No local email app required.",
-      );
-    }
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const payload = {
-      name: form.name.trim(),
-      email: form.email.trim(),
-      subject: form.subject.trim(),
-      message: form.message.trim(),
-      website: form.website.trim(),
-    };
-
-    if (!payload.name || !payload.email || !payload.message) {
-      setStatus("error");
-      setFeedback("Name, email, and message are required before sending.");
-      return;
-    }
-
-    setStatus("submitting");
-    setFeedback("Encrypting message packet and sending to Tate...");
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = (await response.json().catch(() => null)) as {
-        ok?: boolean;
-        message?: string;
-      } | null;
-
-      if (!response.ok || !result?.ok) {
-        throw new Error(result?.message || "Message failed to send.");
-      }
-
-      setStatus("success");
-      setFeedback(result.message || "Message sent. Tate has been notified.");
-      setForm({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-        website: "",
-      });
-    } catch (error) {
-      setStatus("error");
-      setFeedback(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Use the email-app fallback below.",
-      );
-    }
-  }
-
   return (
     <div>
       <p
@@ -1843,123 +1732,24 @@ function ContactContent({ theme }: { theme: ThemeMode }) {
         questions, or anything that should route through the main channel.
       </p>
 
-      <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label>
-            <span className={getContactLabelClassName(theme)}>Your Name</span>
-            <input
-              value={form.name}
-              onChange={(event) => updateField("name", event.target.value)}
-              className={getContactInputClassName(theme)}
-              placeholder="Jane Client"
-              autoComplete="name"
-              maxLength={120}
-              disabled={isSubmitting}
-            />
-          </label>
-
-          <label>
-            <span className={getContactLabelClassName(theme)}>Your Email</span>
-            <input
-              value={form.email}
-              onChange={(event) => updateField("email", event.target.value)}
-              className={getContactInputClassName(theme)}
-              placeholder="you@example.com"
-              autoComplete="email"
-              inputMode="email"
-              maxLength={180}
-              disabled={isSubmitting}
-            />
-          </label>
-        </div>
-
-        <label>
-          <span className={getContactLabelClassName(theme)}>Subject</span>
-          <input
-            value={form.subject}
-            onChange={(event) => updateField("subject", event.target.value)}
-            className={getContactInputClassName(theme)}
-            placeholder="Website build, tech support, collab, etc."
-            maxLength={160}
-            disabled={isSubmitting}
-          />
-        </label>
-
-        <label>
-          <span className={getContactLabelClassName(theme)}>Message</span>
-          <textarea
-            value={form.message}
-            onChange={(event) => updateField("message", event.target.value)}
-            className={cx(getContactInputClassName(theme), "min-h-36 resize-y")}
-            placeholder="Tell me what you need, what timeline you have, and the best way to reply."
-            maxLength={5000}
-            disabled={isSubmitting}
-          />
-        </label>
-
-        <label className="hidden" aria-hidden="true">
-          <span>Website</span>
-          <input
-            value={form.website}
-            onChange={(event) => updateField("website", event.target.value)}
-            tabIndex={-1}
-            autoComplete="off"
-          />
-        </label>
-
-        <div
+      <div className="mt-6 grid gap-3">
+        <a
+          href={SOCIAL_URLS.email}
           className={cx(
-            "rounded-xl border px-4 py-3 text-sm leading-6",
-            status === "success" &&
-              (theme === "matrix"
-                ? "border-emerald-300/30 bg-emerald-300/10 text-emerald-200"
-                : "border-[#2a7f16]/30 bg-[#e8f6df] text-[#2a7f16]"),
-            status === "error" &&
-              (theme === "matrix"
-                ? "border-red-300/30 bg-red-300/10 text-red-200"
-                : "border-[#b42318]/30 bg-[#fff0ef] text-[#b42318]"),
-            (status === "idle" || status === "submitting") &&
-              (theme === "matrix"
-                ? "border-green-400/15 bg-black/30 text-green-300/75"
-                : "border-[#b5b09a] bg-white text-[#333333]"),
+            "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5",
+            theme === "matrix"
+              ? "border-green-300/35 bg-green-400 text-black hover:bg-green-300"
+              : "border-[#103f91] bg-[#245edc] text-white hover:bg-[#174bb8]",
           )}
-          role="status"
         >
-          {feedback}
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={cx(
-              "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
-              theme === "matrix"
-                ? "border-green-300/35 bg-green-400 text-black hover:bg-green-300"
-                : "border-[#103f91] bg-[#245edc] text-white hover:bg-[#174bb8]",
-            )}
-          >
-            <Mail className="mr-2 size-4" />
-            {isSubmitting ? "Sending..." : "Send Message"}
-          </button>
-
-          <a
-            href={SOCIAL_URLS.email}
-            className={cx(
-              "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5",
-              theme === "matrix"
-                ? "border-green-400/20 bg-black/40 text-green-300 hover:border-green-300/45 hover:bg-green-400/10"
-                : "border-[#b5b09a] bg-white text-[#174bb8] hover:border-[#174bb8]",
-            )}
-          >
-            Open Email App
-          </a>
-        </div>
+          <Mail className="mr-2 size-4" />
+          Email Tate
+        </a>
 
         <a
           href={SOCIAL_URLS.llTech}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noreferrer"
           className={cx(
             "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5",
             theme === "matrix"
@@ -1967,9 +1757,9 @@ function ContactContent({ theme }: { theme: ThemeMode }) {
               : "border-[#b5b09a] bg-white text-[#174bb8] hover:border-[#174bb8]",
           )}
         >
-          L&amp;L Tech Solutions
+          L&L Tech Solutions
         </a>
-      </form>
+      </div>
     </div>
   );
 }

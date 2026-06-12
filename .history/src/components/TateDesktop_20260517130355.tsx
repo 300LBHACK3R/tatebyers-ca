@@ -20,12 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type {
-  ComponentType,
-  FormEvent,
-  MouseEvent,
-  ReactNode,
-} from "react";
+import type { ComponentType, MouseEvent, ReactNode } from "react";
 
 type ThemeMode = "matrix" | "xp";
 type WindowId = "terminal" | "links" | "projects" | "creator" | "contact";
@@ -1756,7 +1751,7 @@ function ContactContent({ theme }: { theme: ThemeMode }) {
     }
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const payload = {
