@@ -258,8 +258,8 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 export function TateDesktop() {
-  const [theme, setTheme] = useState<ThemeMode>("matrix");
-  const [entered, setEntered] = useState(false);
+  const [theme, setTheme] = useState<ThemeMode>("xp");
+  const [entered, setEntered] = useState(true);
   const [booting, setBooting] = useState(false);
   const [bootIndex, setBootIndex] = useState(0);
   const [activeWindow, setActiveWindow] = useState<WindowId>("terminal");
@@ -271,15 +271,8 @@ export function TateDesktop() {
   const [isXpNoteVisible, setIsXpNoteVisible] = useState(true);
 
   function toggleTheme() {
-    setTheme((current) => {
-      const nextTheme = current === "matrix" ? "xp" : "matrix";
-
-      if (nextTheme === "xp") {
-        setIsXpNoteVisible(true);
-      }
-
-      return nextTheme;
-    });
+    setTheme("xp");
+    setIsXpNoteVisible(true);
     setStartOpen(false);
   }
 
@@ -495,7 +488,7 @@ export function TateDesktop() {
               : "border border-white/40 bg-[#245edc] text-white hover:bg-[#174bb8]",
           )}
         >
-          {theme === "matrix" ? "Enter XP Mode" : "Return Matrix"}
+          {theme === "matrix" ? "Tate XP" : "Tate XP"}
         </button>
 
         <div
@@ -1157,7 +1150,7 @@ function TerminalContent({
         },
         {
           type: "output",
-          text: "xp, matrix, lltech, youtube, gaming youtube, facebook, tiktok, linkedin",
+          text: "lltech, youtube, gaming youtube, facebook, tiktok, linkedin",
         },
         {
           type: "output",
@@ -1273,20 +1266,17 @@ function TerminalContent({
         type: "success",
         text: "Closed all windows. Desktop cleared.",
       });
-    } else if (normalized === "xp" || normalized === "xp mode") {
-      if (theme === "xp") {
-        output.push({ type: "output", text: "Already running Tate XP." });
-      } else {
-        onToggleTheme();
-        output.push({ type: "success", text: "Switching to Tate XP..." });
-      }
-    } else if (normalized === "matrix" || normalized === "matrix mode") {
-      if (theme === "matrix") {
-        output.push({ type: "output", text: "Already running Matrix mode." });
-      } else {
-        onToggleTheme();
-        output.push({ type: "success", text: "Returning to Matrix mode..." });
-      }
+    } else if (
+      normalized === "xp" ||
+      normalized === "xp mode" ||
+      normalized === "matrix" ||
+      normalized === "matrix mode"
+    ) {
+      setTheme("xp");
+      output.push({
+        type: "success",
+        text: "Tate XP is the default shell. Matrix mode has been disabled.",
+      });
     } else if (
       normalized === "lltech" ||
       normalized === "l&l" ||
@@ -2269,7 +2259,7 @@ function DesktopTopBar({
             }}
             className="rounded-lg border border-white/35 bg-white/15 px-3 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] text-white transition hover:bg-white/25"
           >
-            Return Matrix
+            Tate XP
           </button>
         </header>
 
@@ -2407,7 +2397,7 @@ function DesktopTopBar({
         }}
         className="rounded-xl border border-sky-300/30 bg-sky-400/10 px-3 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] text-sky-200 transition hover:bg-sky-400/20"
       >
-        Enter XP Mode
+        Tate XP
       </button>
     </header>
   );
