@@ -117,6 +117,12 @@ const windows: DesktopWindow[] = [
     icon: Globe2,
   },
   {
+    id: "projects",
+    title: "Brand Systems",
+    subtitle: "Business, apps, hub",
+    icon: Cpu,
+  },
+  {
     id: "creator",
     title: "Creator Mode",
     subtitle: "Gaming + media",
@@ -132,35 +138,18 @@ const windows: DesktopWindow[] = [
 
 const linkGroups: LinkGroup[] = [
   {
-    title: "Main Systems",
-    systemName: "TATE_DIRECTORY",
+    title: "Business Systems",
+    systemName: "BUSINESS_DIRECTORY",
     description:
-      "Business, creator systems, personal hub, and public-facing links organized in one place.",
+      "Main company, services, client work, and professional technology systems.",
     links: [
       {
-        title: "L&L Tech Solutions",
+        title: "L&L Tech Solutions Website",
         label: "BUSINESS_PORTAL",
         description:
-          "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
+          "Websites, tech support, networking, CCTV, and digital services.",
         href: SOCIAL_URLS.llTech,
         icon: BriefcaseBusiness,
-      },
-      {
-        title: "Tates TV",
-        label: "CREATOR_PLATFORM",
-        description:
-          "My custom live-TV style platform with channels, guide systems, themes, uploads, and creator-controlled media.",
-        href: "#creator",
-        icon: Radio,
-        windowId: "creator",
-      },
-      {
-        title: "TateByers.ca",
-        label: "PERSONAL_HUB",
-        description:
-          "My personal home base for business links, creator channels, contact, brand identity, and active systems.",
-        href: "https://www.tatebyers.ca",
-        icon: Monitor,
       },
     ],
   },
@@ -250,12 +239,12 @@ const showcaseItems: ShowcaseItem[] = [
     logoSubtext: "TECH",
   },
   {
-    title: "Tates TV",
+    title: "Tate'€™€š¢'¢¢€š¬¡€š¬'¢¢€š¬¾€š¢s TV",
     status: "IN DEVELOPMENT",
     category: "Creator Platform",
     description:
       "A custom live-TV style web app with channels, guide systems, themes, uploads, and creator-controlled media.",
-    tags: ["Tates TV", "Next.js", "Streaming UI", "Retro TV", "Creator"],
+    tags: ["Tate'€™€š¢'¢¢€š¬¡€š¬'¢¢€š¬¾€š¢s TV", "Next.js", "Streaming UI", "Retro TV", "Creator"],
     logoText: "TTV",
     logoSubtext: "TV OS",
   },
@@ -392,7 +381,7 @@ export function TateDesktop() {
   }
 
   function openAllWindows() {
-    setOpenWindows(["terminal", "links", "creator", "contact"]);
+    setOpenWindows(["terminal", "links", "projects", "creator", "contact"]);
     setActiveWindow("contact");
     setStartOpen(false);
   }
@@ -411,6 +400,13 @@ export function TateDesktop() {
       subtitle: "Grouped router",
       icon: Globe2,
       action: () => openWindow("links"),
+    },
+    {
+      id: "projects",
+      label: "Systems",
+      subtitle: "Brand hub",
+      icon: Folder,
+      action: () => openWindow("projects"),
     },
     {
       id: "creator",
@@ -630,7 +626,7 @@ export function TateDesktop() {
                   )}
                 >
                   This is not a normal link page. This is the control room for
-                  Tate Byers '''''''' business, tech, gaming, creator content, active
+                  Tate Byers '€™€ ‚¬„¢'‚¬Å¡€š¢'€™€š¢'¢¢‚¬Å¡¬€¦¡'‚¬Å¡€š¬'€™€š¢'¢¢€š¬¡€š¬'‚¬Å¡€š business, tech, gaming, creator content, active
                   projects, and whatever gets built next.
                 </p>
 
@@ -1049,6 +1045,19 @@ function WindowLayer({
         </OSWindow>
       )}
 
+      {openWindows.includes("projects") && (
+        <OSWindow
+          title="brand-systems.monitor"
+          subtitle="showcase"
+          isActive={activeWindow === "projects"}
+          theme={theme}
+          onFocus={() => onFocusWindow("projects")}
+          onClose={() => onCloseWindow("projects")}
+        >
+          <ProjectsContent theme={theme} />
+        </OSWindow>
+      )}
+
       {openWindows.includes("creator") && (
         <OSWindow
           title="creator-mode.panel"
@@ -1151,7 +1160,7 @@ function TerminalContent({
         },
         {
           type: "output",
-          text: "open terminal, open links, open creator, open contact",
+          text: "open terminal, open links, open systems, open projects, open creator, open contact",
         },
         {
           type: "output",
@@ -1168,17 +1177,17 @@ function TerminalContent({
       );
     } else if (normalized === "ls" || normalized === "dir") {
       output.push(
-        { type: "output", text: "main-systems/" },
+        { type: "output", text: "business-systems/" },
         { type: "output", text: "youtube-network/" },
         { type: "output", text: "social-profiles/" },
         { type: "output", text: "contact-channels/" },
         { type: "output", text: "terminal.app" },
-        { type: "output", text: "link-router.app" },
+        { type: "output", text: "brand-systems.monitor" },
       );
     } else if (normalized === "whoami") {
       output.push({
         type: "success",
-        text: "Tate Byers '''''''' founder, developer, gamer, creator, builder.",
+        text: "Tate Byers '€™€ ‚¬„¢'‚¬Å¡€š¢'€™€š¢'¢¢‚¬Å¡¬€¦¡'‚¬Å¡€š¬'€™€š¢'¢¢€š¬¡€š¬'‚¬Å¡€š founder, developer, gamer, creator, builder.",
       });
     } else if (normalized === "about") {
       output.push({
@@ -1208,20 +1217,14 @@ function TerminalContent({
       normalized === "cd links"
     ) {
       onOpenWindow("links");
-      output.push({ type: "success", text: "Opened grouped link-router.app." });    } else if (
+      output.push({ type: "success", text: "Opened grouped link-router.app." });
+    } else if (
       normalized === "open projects" ||
       normalized === "projects" ||
-      normalized === "cd projects" ||
-      normalized === "open systems" ||
-      normalized === "systems" ||
-      normalized === "showcase" ||
-      normalized === "cd systems"
+      normalized === "cd projects"
     ) {
-      onOpenWindow("links");
-      output.push({
-        type: "success",
-        text: "Systems showcase is organized inside My Links.",
-      });
+      onOpenWindow("projects");
+      output.push({ type: "success", text: "Opened brand-systems.monitor." });
     } else if (
       normalized === "open creator" ||
       normalized === "creator" ||
@@ -1248,7 +1251,7 @@ function TerminalContent({
       output.push({ type: "success", text: "Closed link-router.app." });
     } else if (normalized === "close projects") {
       onCloseWindow("projects");
-      output.push({ type: "success", text: "Closed link-router.app." });
+      output.push({ type: "success", text: "Closed brand-systems.monitor." });
     } else if (normalized === "close creator") {
       onCloseWindow("creator");
       output.push({ type: "success", text: "Closed creator-mode.panel." });
@@ -1607,7 +1610,7 @@ function ProjectsContent({ theme }: { theme: ThemeMode }) {
             theme === "matrix" ? "text-green-100" : "text-[#174bb8]",
           )}
         >
-          Business, apps, and personal links.
+          Business, apps, and personal systems.
         </h2>
 
         <p
@@ -1616,7 +1619,7 @@ function ProjectsContent({ theme }: { theme: ThemeMode }) {
             theme === "matrix" ? "text-green-200/70" : "text-[#333333]",
           )}
         >
-          This is the central showcase for Tates real ecosystem - the business,
+          This is the central showcase for Tate'€™€š¢'¢¢€š¬¡€š¬'¢¢€š¬¾€š¢s real ecosystem '€™€š¢'¢¢€š¬¡€š¬'¢¢‚¬Å¡¬€š the business,
           the TV platform, and the personal hub. Logo/photo slots are ready for
           custom icons, brand marks, or screenshots.
         </p>
@@ -2277,7 +2280,7 @@ function XPStickyNote({ onDismiss }: { onDismiss: () => void }) {
           aria-label="Close system notes"
           title="Close system notes"
         >
-          '''''
+          '€™€ ‚¬„¢'‚¬ ¢€š¬€ž¢'€™€š¢'¢¢€š¬¡€š¬'¢¢‚¬Å¡¬€š
         </button>
       </div>
 
@@ -2571,7 +2574,7 @@ function OSWindow({
               aria-label={`Close ${title}`}
               title={`Close ${title}`}
             >
-              '''''
+              '€™€ ‚¬„¢'‚¬ ¢€š¬€ž¢'€™€š¢'¢¢€š¬¡€š¬'¢¢‚¬Å¡¬€š
             </button>
 
             <span
