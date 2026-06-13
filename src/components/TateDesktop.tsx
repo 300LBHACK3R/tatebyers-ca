@@ -68,6 +68,15 @@ type ProjectItem = {
   tags: string[];
 };
 
+type ShowcaseItem = {
+  title: string;
+  status: string;
+  category: string;
+  description: string;
+  tags: string[];
+  logoText: string;
+  logoSubtext: string;
+};
 type TerminalLine = {
   id: number;
   type: "input" | "output" | "success" | "error";
@@ -109,8 +118,8 @@ const windows: DesktopWindow[] = [
   },
   {
     id: "projects",
-    title: "Active Systems",
-    subtitle: "Builds, brands, projects",
+    title: "Brand Systems",
+    subtitle: "Business, apps, hub",
     icon: Cpu,
   },
   {
@@ -218,27 +227,36 @@ const linkGroups: LinkGroup[] = [
   },
 ];
 
-const projects: ProjectItem[] = [
+const showcaseItems: ShowcaseItem[] = [
   {
     title: "L&L Tech Solutions",
     status: "ONLINE",
+    category: "Business System",
     description:
-      "Main technology company for websites, tech support, networking, CCTV, and client systems.",
-    tags: ["Websites", "Tech Support", "Networking", "CCTV"],
+      "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
+    tags: ["Business", "Websites", "Tech Support", "Networking", "CCTV"],
+    logoText: "L&L",
+    logoSubtext: "TECH",
   },
   {
-    title: "Retro TV / Tate’s TV",
+    title: "TateÃ¢â‚¬â„¢s TV",
     status: "IN DEVELOPMENT",
+    category: "Creator Platform",
     description:
-      "A custom live-TV style web app with channels, guide systems, themes, and creator-controlled media.",
-    tags: ["Next.js", "React", "Streaming UI", "Gaming"],
+      "A custom live-TV style web app with channels, guide systems, themes, uploads, and creator-controlled media.",
+    tags: ["TateÃ¢â‚¬â„¢s TV", "Next.js", "Streaming UI", "Retro TV", "Creator"],
+    logoText: "TTV",
+    logoSubtext: "TV OS",
   },
   {
     title: "TateByers.ca",
-    status: "BOOTING",
+    status: "LIVE HUB",
+    category: "Personal Operating System",
     description:
-      "Personal digital operating system for business links, creator channels, projects, and identity.",
-    tags: ["Portfolio", "OS UI", "Personal Brand", "Creator Hub"],
+      "My personal digital home base for business links, creator channels, contact, brand identity, and active systems.",
+    tags: ["Portfolio", "XP UI", "Personal Brand", "Contact Hub"],
+    logoText: "TB",
+    logoSubtext: ".CA",
   },
 ];
 
@@ -385,8 +403,8 @@ export function TateDesktop() {
     },
     {
       id: "projects",
-      label: "Projects",
-      subtitle: "Active systems",
+      label: "Systems",
+      subtitle: "Brand hub",
       icon: Folder,
       action: () => openWindow("projects"),
     },
@@ -608,7 +626,7 @@ export function TateDesktop() {
                   )}
                 >
                   This is not a normal link page. This is the control room for
-                  Tate Byers — business, tech, gaming, creator content, active
+                  Tate Byers ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â business, tech, gaming, creator content, active
                   projects, and whatever gets built next.
                 </p>
 
@@ -1029,8 +1047,8 @@ function WindowLayer({
 
       {openWindows.includes("projects") && (
         <OSWindow
-          title="active-systems.monitor"
-          subtitle="projects"
+          title="brand-systems.monitor"
+          subtitle="showcase"
           isActive={activeWindow === "projects"}
           theme={theme}
           onFocus={() => onFocusWindow("projects")}
@@ -1142,7 +1160,7 @@ function TerminalContent({
         },
         {
           type: "output",
-          text: "open terminal, open links, open projects, open creator, open contact",
+          text: "open terminal, open links, open systems, open projects, open creator, open contact",
         },
         {
           type: "output",
@@ -1164,12 +1182,12 @@ function TerminalContent({
         { type: "output", text: "social-profiles/" },
         { type: "output", text: "contact-channels/" },
         { type: "output", text: "terminal.app" },
-        { type: "output", text: "active-systems.monitor" },
+        { type: "output", text: "brand-systems.monitor" },
       );
     } else if (normalized === "whoami") {
       output.push({
         type: "success",
-        text: "Tate Byers — founder, developer, gamer, creator, builder.",
+        text: "Tate Byers ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â founder, developer, gamer, creator, builder.",
       });
     } else if (normalized === "about") {
       output.push({
@@ -1206,7 +1224,7 @@ function TerminalContent({
       normalized === "cd projects"
     ) {
       onOpenWindow("projects");
-      output.push({ type: "success", text: "Opened active-systems.monitor." });
+      output.push({ type: "success", text: "Opened brand-systems.monitor." });
     } else if (
       normalized === "open creator" ||
       normalized === "creator" ||
@@ -1233,7 +1251,7 @@ function TerminalContent({
       output.push({ type: "success", text: "Closed link-router.app." });
     } else if (normalized === "close projects") {
       onCloseWindow("projects");
-      output.push({ type: "success", text: "Closed active-systems.monitor." });
+      output.push({ type: "success", text: "Closed brand-systems.monitor." });
     } else if (normalized === "close creator") {
       onCloseWindow("creator");
       output.push({ type: "success", text: "Closed creator-mode.panel." });
@@ -1569,70 +1587,163 @@ function LinksContent({
 function ProjectsContent({ theme }: { theme: ThemeMode }) {
   return (
     <div className="grid gap-4">
-      {projects.map((project) => (
-        <div
-          key={project.title}
+      <div
+        className={cx(
+          "rounded-xl border p-4",
+          theme === "matrix"
+            ? "border-green-400/15 bg-black/30"
+            : "border-[#b5b09a] bg-white",
+        )}
+      >
+        <p
           className={cx(
-            "rounded-xl border p-4",
-            theme === "matrix"
-              ? "border-green-400/15 bg-black/35"
-              : "border-[#b5b09a] bg-white",
+            "font-mono text-[10px] font-black uppercase tracking-[0.22em]",
+            theme === "matrix" ? "text-green-500" : "text-[#486e21]",
           )}
         >
-          <div className="mb-3 flex items-start justify-between gap-4">
-            <div>
-              <p
-                className={cx(
-                  "font-bold",
-                  theme === "matrix" ? "text-green-100" : "text-[#1d1d1d]",
-                )}
-              >
-                {project.title}
-              </p>
-              <p
-                className={cx(
-                  "mt-1 font-mono text-[10px] font-black uppercase tracking-[0.2em]",
-                  theme === "matrix" ? "text-green-500" : "text-[#486e21]",
-                )}
-              >
-                {project.status}
-              </p>
-            </div>
+          BRAND_SYSTEMS
+        </p>
 
-            <ShieldCheck
-              className={cx(
-                "size-5",
-                theme === "matrix" ? "text-green-400" : "text-[#174bb8]",
-              )}
-            />
-          </div>
+        <h2
+          className={cx(
+            "mt-2 text-2xl font-black",
+            theme === "matrix" ? "text-green-100" : "text-[#174bb8]",
+          )}
+        >
+          Business, apps, and personal systems.
+        </h2>
 
-          <p
+        <p
+          className={cx(
+            "mt-3 max-w-3xl text-sm leading-6",
+            theme === "matrix" ? "text-green-200/70" : "text-[#333333]",
+          )}
+        >
+          This is the central showcase for TateÃ¢â‚¬â„¢s real ecosystem Ã¢â‚¬â€ the business,
+          the TV platform, and the personal hub. Logo/photo slots are ready for
+          custom icons, brand marks, or screenshots.
+        </p>
+      </div>
+
+      <div className="grid gap-4">
+        {showcaseItems.map((item) => (
+          <article
+            key={item.title}
             className={cx(
-              "text-sm leading-6",
-              theme === "matrix" ? "text-green-200/70" : "text-[#333333]",
+              "group overflow-hidden rounded-2xl border transition hover:-translate-y-0.5",
+              theme === "matrix"
+                ? "border-green-400/15 bg-black/35 hover:border-green-300/35"
+                : "border-[#b5b09a] bg-white hover:border-[#174bb8]",
             )}
           >
-            {project.description}
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
+            <div className="grid gap-0 md:grid-cols-[190px_1fr]">
+              <div
                 className={cx(
-                  "rounded-full border px-3 py-1 font-mono text-[10px] font-bold",
+                  "flex min-h-40 items-center justify-center border-b p-5 md:border-b-0 md:border-r",
                   theme === "matrix"
-                    ? "border-green-400/15 bg-green-400/10 text-green-300"
-                    : "border-[#174bb8]/30 bg-[#d7e8ff] text-[#174bb8]",
+                    ? "border-green-400/15 bg-green-950/15"
+                    : "border-[#b5b09a] bg-gradient-to-br from-[#d7e8ff] via-white to-[#ece9d8]",
                 )}
               >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      ))}
+                <div
+                  className={cx(
+                    "grid aspect-square w-full max-w-32 place-items-center rounded-3xl border text-center shadow-xl transition group-hover:scale-[1.02]",
+                    theme === "matrix"
+                      ? "border-green-300/25 bg-black/65 shadow-[0_0_35px_rgba(34,197,94,0.14)]"
+                      : "border-[#174bb8]/30 bg-white shadow-[0_16px_35px_rgba(23,75,184,0.16)]",
+                  )}
+                  aria-label={`${item.title} logo placeholder`}
+                >
+                  <div>
+                    <p
+                      className={cx(
+                        "text-4xl font-black tracking-tight",
+                        theme === "matrix" ? "text-green-300" : "text-[#174bb8]",
+                      )}
+                    >
+                      {item.logoText}
+                    </p>
+                    <p
+                      className={cx(
+                        "mt-1 font-mono text-[10px] font-black uppercase tracking-[0.24em]",
+                        theme === "matrix" ? "text-green-600" : "text-[#486e21]",
+                      )}
+                    >
+                      {item.logoSubtext}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-5 sm:p-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p
+                      className={cx(
+                        "font-mono text-[10px] font-black uppercase tracking-[0.22em]",
+                        theme === "matrix" ? "text-green-500" : "text-[#486e21]",
+                      )}
+                    >
+                      {item.category}
+                    </p>
+
+                    <h3
+                      className={cx(
+                        "mt-2 text-2xl font-black leading-tight",
+                        theme === "matrix" ? "text-green-100" : "text-[#1d1d1d]",
+                      )}
+                    >
+                      {item.title}
+                    </h3>
+
+                    <p
+                      className={cx(
+                        "mt-2 font-mono text-[10px] font-black uppercase tracking-[0.2em]",
+                        theme === "matrix" ? "text-green-500" : "text-[#486e21]",
+                      )}
+                    >
+                      {item.status}
+                    </p>
+                  </div>
+
+                  <ShieldCheck
+                    className={cx(
+                      "size-6 shrink-0",
+                      theme === "matrix" ? "text-green-400" : "text-[#174bb8]",
+                    )}
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <p
+                  className={cx(
+                    "mt-4 text-base leading-7",
+                    theme === "matrix" ? "text-green-200/75" : "text-[#333333]",
+                  )}
+                >
+                  {item.description}
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {item.tags.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className={cx(
+                        "rounded-full border px-3 py-1.5 font-mono text-[10px] font-bold",
+                        theme === "matrix"
+                          ? "border-green-400/15 bg-green-400/10 text-green-300"
+                          : "border-[#174bb8]/30 bg-[#d7e8ff] text-[#174bb8]",
+                      )}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
@@ -2169,7 +2280,7 @@ function XPStickyNote({ onDismiss }: { onDismiss: () => void }) {
           aria-label="Close system notes"
           title="Close system notes"
         >
-          ×
+          ÃƒÆ’Ã¢â‚¬â€
         </button>
       </div>
 
@@ -2463,7 +2574,7 @@ function OSWindow({
               aria-label={`Close ${title}`}
               title={`Close ${title}`}
             >
-              ×
+              ÃƒÆ’Ã¢â‚¬â€
             </button>
 
             <span
