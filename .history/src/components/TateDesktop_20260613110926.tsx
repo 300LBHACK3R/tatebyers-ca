@@ -132,7 +132,7 @@ const linkGroups: LinkGroup[] = [
     links: [
       {
         title: "L&L Tech Solutions",
-        label: "BUSINESS Website",
+        label: "BUSINESS_PORTAL",
         description:
           "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
         href: SOCIAL_URLS.llTech,
@@ -140,7 +140,7 @@ const linkGroups: LinkGroup[] = [
         },
 {
         title: "L&L Tech Solutions YouTube",
-        label: "Tech YOUTUBE",
+        label: "MAIN_YOUTUBE",
         description:
           "Long-form videos, gaming uploads, project logs, tutorials, and future content.",
         href: SOCIAL_URLS.youtubeMain,
@@ -149,7 +149,7 @@ const linkGroups: LinkGroup[] = [
 
         {
         title: "L&L Tech Solutions TikTok",
-        label: "TIK-TOK",
+        label: "CLIP_ENGINE",
         description:
           "Tech projects, behind-the-scenes work, and creator content.",
         href: SOCIAL_URLS.tiktok,

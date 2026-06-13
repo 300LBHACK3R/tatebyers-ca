@@ -132,7 +132,7 @@ const linkGroups: LinkGroup[] = [
     links: [
       {
         title: "L&L Tech Solutions",
-        label: "BUSINESS Website",
+        label: "BUSINESS_PORTAL",
         description:
           "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
         href: SOCIAL_URLS.llTech,
@@ -140,7 +140,7 @@ const linkGroups: LinkGroup[] = [
         },
 {
         title: "L&L Tech Solutions YouTube",
-        label: "Tech YOUTUBE",
+        label: "MAIN_YOUTUBE",
         description:
           "Long-form videos, gaming uploads, project logs, tutorials, and future content.",
         href: SOCIAL_URLS.youtubeMain,
@@ -149,16 +149,9 @@ const linkGroups: LinkGroup[] = [
 
         {
         title: "L&L Tech Solutions TikTok",
-        label: "TIK-TOK",
+        label: "CLIP_ENGINE",
         description:
-          "Tech projects, behind-the-scenes work, and creator content.",
-        href: SOCIAL_URLS.tiktok,
-        icon: Play,
-      },
-      {
-        title: "L&L Tech Solutions Facebook",
-        label: "Facebook",
-        description:"",
+          "Gaming clips, tech projects, behind-the-scenes work, and creator content.",
         href: SOCIAL_URLS.tiktok,
         icon: Play,
       },
@@ -187,11 +180,11 @@ const linkGroups: LinkGroup[] = [
   icon: Monitor,
 },
 {
-  title: "Crestline Painting",
+  title: "Tow-N-Go Trailers",
   label: "Website Development, SEO & Digital Growth Management",
   description:
-    "Designed & Developed Crestline Painting digital premium website.",
-    href: "https://www.crestlinepainting.ca/",
+    "Built and continue to manage Tow-N-Go Trailers digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
+  href: "https://www.towandgotrailers.ca/",
   icon: Monitor,
 },
     ],

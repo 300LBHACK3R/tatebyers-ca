@@ -132,7 +132,7 @@ const linkGroups: LinkGroup[] = [
     links: [
       {
         title: "L&L Tech Solutions",
-        label: "BUSINESS Website",
+        label: "BUSINESS_PORTAL",
         description:
           "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
         href: SOCIAL_URLS.llTech,
