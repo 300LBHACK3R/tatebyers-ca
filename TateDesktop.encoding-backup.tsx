@@ -239,12 +239,12 @@ const showcaseItems: ShowcaseItem[] = [
     logoSubtext: "TECH",
   },
   {
-    title: "Tate'€™€š¢'¢¢€š¬¡€š¬'¢¢€š¬¾€š¢s TV",
+    title: "TateÃ¢â‚¬â„¢s TV",
     status: "IN DEVELOPMENT",
     category: "Creator Platform",
     description:
       "A custom live-TV style web app with channels, guide systems, themes, uploads, and creator-controlled media.",
-    tags: ["Tate'€™€š¢'¢¢€š¬¡€š¬'¢¢€š¬¾€š¢s TV", "Next.js", "Streaming UI", "Retro TV", "Creator"],
+    tags: ["TateÃ¢â‚¬â„¢s TV", "Next.js", "Streaming UI", "Retro TV", "Creator"],
     logoText: "TTV",
     logoSubtext: "TV OS",
   },
@@ -626,7 +626,7 @@ export function TateDesktop() {
                   )}
                 >
                   This is not a normal link page. This is the control room for
-                  Tate Byers '€™€ ‚¬„¢'‚¬Å¡€š¢'€™€š¢'¢¢‚¬Å¡¬€¦¡'‚¬Å¡€š¬'€™€š¢'¢¢€š¬¡€š¬'‚¬Å¡€š business, tech, gaming, creator content, active
+                  Tate Byers ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â business, tech, gaming, creator content, active
                   projects, and whatever gets built next.
                 </p>
 
@@ -1187,7 +1187,7 @@ function TerminalContent({
     } else if (normalized === "whoami") {
       output.push({
         type: "success",
-        text: "Tate Byers '€™€ ‚¬„¢'‚¬Å¡€š¢'€™€š¢'¢¢‚¬Å¡¬€¦¡'‚¬Å¡€š¬'€™€š¢'¢¢€š¬¡€š¬'‚¬Å¡€š founder, developer, gamer, creator, builder.",
+        text: "Tate Byers ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â founder, developer, gamer, creator, builder.",
       });
     } else if (normalized === "about") {
       output.push({
@@ -1619,7 +1619,7 @@ function ProjectsContent({ theme }: { theme: ThemeMode }) {
             theme === "matrix" ? "text-green-200/70" : "text-[#333333]",
           )}
         >
-          This is the central showcase for Tate'€™€š¢'¢¢€š¬¡€š¬'¢¢€š¬¾€š¢s real ecosystem '€™€š¢'¢¢€š¬¡€š¬'¢¢‚¬Å¡¬€š the business,
+          This is the central showcase for TateÃ¢â‚¬â„¢s real ecosystem Ã¢â‚¬â€ the business,
           the TV platform, and the personal hub. Logo/photo slots are ready for
           custom icons, brand marks, or screenshots.
         </p>
@@ -2280,7 +2280,7 @@ function XPStickyNote({ onDismiss }: { onDismiss: () => void }) {
           aria-label="Close system notes"
           title="Close system notes"
         >
-          '€™€ ‚¬„¢'‚¬ ¢€š¬€ž¢'€™€š¢'¢¢€š¬¡€š¬'¢¢‚¬Å¡¬€š
+          ÃƒÆ’Ã¢â‚¬â€
         </button>
       </div>
 
@@ -2574,7 +2574,7 @@ function OSWindow({
               aria-label={`Close ${title}`}
               title={`Close ${title}`}
             >
-              '€™€ ‚¬„¢'‚¬ ¢€š¬€ž¢'€™€š¢'¢¢€š¬¡€š¬'¢¢‚¬Å¡¬€š
+              ÃƒÆ’Ã¢â‚¬â€
             </button>
 
             <span
