@@ -175,18 +175,10 @@ const linkGroups: LinkGroup[] = [
   title: "Tow-N-Go Trailers",
   label: "Website Development, SEO & Digital Growth Management",
   description:
-    "Built and continue to manage Tow-N-Go TrailersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
+    "Built and continue to manage Tow-N-Go Trailers’ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
   href: "https://www.towandgotrailers.ca/",
   icon: Monitor,
-},
-{
-  title: "Tow-N-Go Trailers",
-  label: "Website Development, SEO & Digital Growth Management",
-  description:
-    "Built and continue to manage Tow-N-Go TrailersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
-  href: "https://www.towandgotrailers.ca/",
-  icon: Monitor,
-},
+}
     ],
   },
 
@@ -1449,7 +1441,7 @@ function LinksContent({
           </div>
 
           <div className="grid gap-3 p-3">
-            {group.links.map((item, itemIndex) => {
+            {group.links.map((item) => {
               const Icon = item.icon;
               const isMail = item.href.startsWith("mailto:");
 

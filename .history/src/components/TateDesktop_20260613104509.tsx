@@ -20,10 +20,15 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { ComponentType, MouseEvent, ReactNode } from "react";
+import type {
+  ComponentType,
+  FormEvent,
+  MouseEvent,
+  ReactNode,
+} from "react";
 
 type ThemeMode = "matrix" | "xp";
-type WindowId = "terminal" | "links" | "projects" | "creator" | "contact";
+type WindowId = "terminal" | "links" | "projects" | "contact";
 
 type DesktopWindow = {
   id: WindowId;
@@ -46,6 +51,7 @@ type ExternalLink = {
   description: string;
   href: string;
   icon: ComponentType<{ className?: string }>;
+  windowId?: WindowId;
 };
 
 type LinkGroup = {
@@ -62,22 +68,39 @@ type ProjectItem = {
   tags: string[];
 };
 
+type ShowcaseItem = {
+  title: string;
+  status: string;
+  category: string;
+  description: string;
+  tags: string[];
+  logoText: string;
+  logoSubtext: string;
+};
 type TerminalLine = {
   id: number;
   type: "input" | "output" | "success" | "error";
   text: string;
 };
 
+type ContactFormState = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  website: string;
+};
+
+type ContactSubmitStatus = "idle" | "submitting" | "success" | "error";
+
 const SOCIAL_URLS = {
   llTech: "https://lltechsolutions.ca",
   youtubeMain: "https://youtube.com/@LLTechSolutions/videos",
-  youtubeGaming: "https://youtube.com/@LLTechSolutions/videos",
-  youtubeTech: "https://youtube.com/@LLTechSolutions/videos",
   facebook: "https://www.facebook.com/profile.php?id=61557129795810",
   tiktok: "https://www.tiktok.com/@lltechsolutions",
   linkedin: "https://www.linkedin.com/in/tatebyers/",
-  email: "mailto:hello@tatebyers.ca",
-};
+  email: "mailto:tatebyers@protonmail.com",
+} as const;
 
 const windows: DesktopWindow[] = [
   {
@@ -93,18 +116,6 @@ const windows: DesktopWindow[] = [
     icon: Globe2,
   },
   {
-    id: "projects",
-    title: "Active Systems",
-    subtitle: "Builds, brands, projects",
-    icon: Cpu,
-  },
-  {
-    id: "creator",
-    title: "Creator Mode",
-    subtitle: "Gaming + media",
-    icon: Gamepad2,
-  },
-  {
     id: "contact",
     title: "Open Channel",
     subtitle: "Contact Tate",
@@ -114,26 +125,76 @@ const windows: DesktopWindow[] = [
 
 const linkGroups: LinkGroup[] = [
   {
-    title: "Business Systems",
-    systemName: "BUSINESS_DIRECTORY",
+    title: "My Business",
+    systemName: "TATE_DIRECTORY",
     description:
-      "Main company, services, client work, and professional technology systems.",
+      "L&L Tech Solutions Business Website, & public-facing links organized in one place.",
     links: [
       {
-        title: "L&L Tech Solutions Website",
+        title: "L&L Tech Solutions",
         label: "BUSINESS_PORTAL",
         description:
-          "Websites, tech support, networking, CCTV, and digital services.",
+          "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
         href: SOCIAL_URLS.llTech,
         icon: BriefcaseBusiness,
+        },
+{
+        title: "L&L Tech Solutions YouTube",
+        label: "MAIN_YOUTUBE",
+        description:
+          "Long-form videos, gaming uploads, project logs, tutorials, and future content.",
+        href: SOCIAL_URLS.youtubeMain,
+        icon: Video,
+      },
+
+        {
+        title: "L&L Tech Solutions TikTok",
+        label: "CLIP_ENGINE",
+        description:
+          "Gaming clips, tech projects, behind-the-scenes work, and creator content.",
+        href: SOCIAL_URLS.tiktok,
+        icon: Play,
       },
     ],
   },
+ {
+    title: "My Website Portfolios",
+    systemName: "TATE_DIRECTORY",
+    description:
+      "Business, personal hub, and public-facing links organized in one place.",
+    links: [
+      {
+        title: "Tates TV",
+        label: "CREATOR_PLATFORM",
+        description:
+          "My custom live-TV style platform with channels, guide systems, themes, uploads, and creator-controlled media.",
+        href: "https://tatestv.ca",
+        icon: Radio,
+      },
+      {
+  title: "Tow-N-Go Trailers",
+  label: "Website Development, SEO & Digital Growth Management",
+  description:
+    "Built and continue to manage Tow-N-Go Trailers’ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
+  href: "https://www.towandgotrailers.ca/",
+  icon: Monitor,
+},
+{
+  title: "Tow-N-Go Trailers",
+  label: "Website Development, SEO & Digital Growth Management",
+  description:
+    "Built and continue to manage Tow-N-Go Trailers’ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
+  href: "https://www.towandgotrailers.ca/",
+  icon: Monitor,
+}
+    ],
+  },
+
   {
     title: "YouTube Network",
     systemName: "VIDEO_ARCHIVE",
     description:
-      "YouTube channels, long-form videos, project logs, gaming uploads, and tech media.",
+      "YouTube channels, long-form videos, project logs, gaming uploads, and creator media.",
     links: [
       {
         title: "L&L Tech Solutions YouTube",
@@ -143,22 +204,6 @@ const linkGroups: LinkGroup[] = [
         href: SOCIAL_URLS.youtubeMain,
         icon: Video,
       },
-      {
-        title: "Gaming YouTube",
-        label: "GAMING_ARCHIVE",
-        description:
-          "Gaming clips, highlights, uploads, future streams, and creator experiments.",
-        href: SOCIAL_URLS.youtubeGaming,
-        icon: Gamepad2,
-      },
-      {
-        title: "Tech / Builds YouTube",
-        label: "TECH_MEDIA",
-        description:
-          "Website builds, technical projects, repairs, tutorials, and behind-the-scenes work.",
-        href: SOCIAL_URLS.youtubeTech,
-        icon: Monitor,
-      },
     ],
   },
   {
@@ -167,14 +212,6 @@ const linkGroups: LinkGroup[] = [
     description:
       "Public-facing social platforms, business content, and professional profiles.",
     links: [
-      {
-        title: "L&L Tech Solutions TikTok",
-        label: "CLIP_ENGINE",
-        description:
-          "Gaming clips, tech projects, behind-the-scenes work, and creator content.",
-        href: SOCIAL_URLS.tiktok,
-        icon: Play,
-      },
       {
         title: "Tate Byers Facebook",
         label: "SOCIAL_FEED",
@@ -203,34 +240,44 @@ const linkGroups: LinkGroup[] = [
         label: "DIRECT_CONTACT",
         description:
           "Business, websites, tech work, collaborations, creator ideas, or project questions.",
-        href: SOCIAL_URLS.email,
+        href: "#contact",
         icon: Mail,
+        windowId: "contact",
       },
     ],
   },
 ];
 
-const projects: ProjectItem[] = [
+const showcaseItems: ShowcaseItem[] = [
   {
     title: "L&L Tech Solutions",
     status: "ONLINE",
+    category: "Business System",
     description:
-      "Main technology company for websites, tech support, networking, CCTV, and client systems.",
-    tags: ["Websites", "Tech Support", "Networking", "CCTV"],
+      "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
+    tags: ["Business", "Websites", "Tech Support", "Networking", "CCTV"],
+    logoText: "L&L",
+    logoSubtext: "TECH",
   },
   {
-    title: "Retro TV / Tate’s TV",
+    title: "Tates TV",
     status: "IN DEVELOPMENT",
+    category: "Creator Platform",
     description:
-      "A custom live-TV style web app with channels, guide systems, themes, and creator-controlled media.",
-    tags: ["Next.js", "React", "Streaming UI", "Gaming"],
+      "A custom live-TV style web app with channels, guide systems, themes, uploads, and creator-controlled media.",
+    tags: ["Tates TV", "Next.js", "Streaming UI", "Retro TV", "Creator"],
+    logoText: "TTV",
+    logoSubtext: "TV OS",
   },
   {
     title: "TateByers.ca",
-    status: "BOOTING",
+    status: "LIVE HUB",
+    category: "Personal Operating System",
     description:
-      "Personal digital operating system for business links, creator channels, projects, and identity.",
-    tags: ["Portfolio", "OS UI", "Personal Brand", "Creator Hub"],
+      "My personal digital home base for business links, contact, brand identity, and active systems.",
+    tags: ["Portfolio", "XP UI", "Personal Brand", "Contact Hub"],
+    logoText: "TB",
+    logoSubtext: ".CA",
   },
 ];
 
@@ -238,7 +285,7 @@ const bootLines = [
   "Initializing Tate Portfolio System...",
   "Loading personal brand interface...",
   "Mounting /business/lltechsolutions...",
-  "Checking creator channels...",
+  "Checking public links...",
   "Starting desktop environment...",
   "Injecting caffeine into UI pipeline...",
   "Warning: normal portfolio templates rejected.",
@@ -250,8 +297,8 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 export function TateDesktop() {
-  const [theme, setTheme] = useState<ThemeMode>("matrix");
-  const [entered, setEntered] = useState(false);
+  const [theme, setTheme] = useState<ThemeMode>("xp");
+  const [entered, setEntered] = useState(true);
   const [booting, setBooting] = useState(false);
   const [bootIndex, setBootIndex] = useState(0);
   const [activeWindow, setActiveWindow] = useState<WindowId>("terminal");
@@ -260,9 +307,11 @@ export function TateDesktop() {
     "links",
   ]);
   const [startOpen, setStartOpen] = useState(false);
+  const [isXpNoteVisible, setIsXpNoteVisible] = useState(true);
 
   function toggleTheme() {
-    setTheme((current) => (current === "matrix" ? "xp" : "matrix"));
+    setTheme("xp");
+    setIsXpNoteVisible(true);
     setStartOpen(false);
   }
 
@@ -275,8 +324,8 @@ export function TateDesktop() {
 
       if (!AudioContextClass) return;
 
-      const ctx = new AudioContextClass();
-      const now = ctx.currentTime;
+      const context = new AudioContextClass();
+      const now = context.currentTime;
 
       const notes =
         theme === "xp"
@@ -293,8 +342,8 @@ export function TateDesktop() {
             ];
 
       notes.forEach((note) => {
-        const oscillator = ctx.createOscillator();
-        const gain = ctx.createGain();
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
 
         oscillator.type = theme === "xp" ? "sine" : "square";
         oscillator.frequency.setValueAtTime(note.frequency, now + note.start);
@@ -307,13 +356,13 @@ export function TateDesktop() {
         );
 
         oscillator.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(context.destination);
 
         oscillator.start(now + note.start);
         oscillator.stop(now + note.start + note.duration + 0.02);
       });
     } catch {
-      // Optional audio only.
+      // Audio is optional and safely ignored when blocked by the browser.
     }
   }
 
@@ -353,7 +402,7 @@ export function TateDesktop() {
   }
 
   function openAllWindows() {
-    setOpenWindows(["terminal", "links", "projects", "creator", "contact"]);
+    setOpenWindows(["terminal", "links", "contact"]);
     setActiveWindow("contact");
     setStartOpen(false);
   }
@@ -374,20 +423,6 @@ export function TateDesktop() {
       action: () => openWindow("links"),
     },
     {
-      id: "projects",
-      label: "Projects",
-      subtitle: "Active systems",
-      icon: Folder,
-      action: () => openWindow("projects"),
-    },
-    {
-      id: "creator",
-      label: "Gaming",
-      subtitle: "Creator mode",
-      icon: Gamepad2,
-      action: () => openWindow("creator"),
-    },
-    {
       id: "contact",
       label: "Contact",
       subtitle: "Open channel",
@@ -399,7 +434,8 @@ export function TateDesktop() {
       label: "L&L Tech",
       subtitle: "Business site",
       icon: BriefcaseBusiness,
-      action: () => window.open(SOCIAL_URLS.llTech, "_blank", "noopener,noreferrer"),
+      action: () =>
+        window.open(SOCIAL_URLS.llTech, "_blank", "noopener,noreferrer"),
     },
     {
       id: "trash",
@@ -429,6 +465,32 @@ export function TateDesktop() {
     return () => window.clearTimeout(timer);
   }, [booting, bootIndex]);
 
+  useEffect(() => {
+    function handleGlobalKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setStartOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleGlobalKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (theme !== "xp" || !entered || !isXpNoteVisible) return;
+
+    const timer = window.setTimeout(() => {
+      setIsXpNoteVisible(false);
+    }, 60000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [entered, isXpNoteVisible, theme]);
+
   if (!entered) {
     return (
       <main
@@ -451,7 +513,7 @@ export function TateDesktop() {
               : "border border-white/40 bg-[#245edc] text-white hover:bg-[#174bb8]",
           )}
         >
-          {theme === "matrix" ? "Enter XP Mode" : "Return Matrix"}
+          {theme === "matrix" ? "Tate XP" : "Tate XP"}
         </button>
 
         <div
@@ -571,7 +633,7 @@ export function TateDesktop() {
                   )}
                 >
                   This is not a normal link page. This is the control room for
-                  Tate Byers — business, tech, gaming, creator content, active
+                  Tate Byers '''''''' business, tech, gaming, creator content, active
                   projects, and whatever gets built next.
                 </p>
 
@@ -613,7 +675,10 @@ export function TateDesktop() {
                 >
                   <p>&gt; press ENTER SITE to boot the desktop environment</p>
                   <p>&gt; terminal supports real site navigation commands</p>
-                  <p>&gt; links are grouped by business, YouTube, social, and contact</p>
+                  <p>
+                    &gt; links are grouped by business, YouTube, social, and
+                    contact
+                  </p>
                 </div>
               </>
             ) : (
@@ -667,6 +732,8 @@ export function TateDesktop() {
             shortcuts={desktopShortcuts}
             openWindows={openWindows}
             activeWindow={activeWindow}
+            isXpNoteVisible={isXpNoteVisible}
+            onDismissXpNote={() => setIsXpNoteVisible(false)}
             onOpenWindow={openWindow}
             onFocusWindow={setActiveWindow}
             onCloseWindow={closeWindow}
@@ -848,6 +915,8 @@ function XPDesktop({
   shortcuts,
   openWindows,
   activeWindow,
+  isXpNoteVisible,
+  onDismissXpNote,
   onOpenWindow,
   onFocusWindow,
   onCloseWindow,
@@ -857,6 +926,8 @@ function XPDesktop({
   shortcuts: DesktopShortcut[];
   openWindows: WindowId[];
   activeWindow: WindowId;
+  isXpNoteVisible: boolean;
+  onDismissXpNote: () => void;
   onOpenWindow: (id: WindowId) => void;
   onFocusWindow: (id: WindowId) => void;
   onCloseWindow: (id: WindowId) => void;
@@ -872,7 +943,7 @@ function XPDesktop({
       </div>
 
       <section className="relative ml-0 min-h-[calc(100vh-7rem)] rounded-xl border border-white/25 bg-white/5 p-3 shadow-inner sm:ml-36">
-        <XPStickyNote />
+        {isXpNoteVisible && <XPStickyNote onDismiss={onDismissXpNote} />}
 
         {openWindows.length === 0 && (
           <div className="absolute left-1/2 top-1/2 max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-[#1847a3] bg-[#ece9d8] p-6 text-center shadow-2xl">
@@ -977,33 +1048,7 @@ function WindowLayer({
           onFocus={() => onFocusWindow("links")}
           onClose={() => onCloseWindow("links")}
         >
-          <LinksContent theme={theme} />
-        </OSWindow>
-      )}
-
-      {openWindows.includes("projects") && (
-        <OSWindow
-          title="active-systems.monitor"
-          subtitle="projects"
-          isActive={activeWindow === "projects"}
-          theme={theme}
-          onFocus={() => onFocusWindow("projects")}
-          onClose={() => onCloseWindow("projects")}
-        >
-          <ProjectsContent theme={theme} />
-        </OSWindow>
-      )}
-
-      {openWindows.includes("creator") && (
-        <OSWindow
-          title="creator-mode.panel"
-          subtitle="gaming/media"
-          isActive={activeWindow === "creator"}
-          theme={theme}
-          onFocus={() => onFocusWindow("creator")}
-          onClose={() => onCloseWindow("creator")}
-        >
-          <CreatorContent theme={theme} />
+          <LinksContent theme={theme} onOpenWindow={onOpenWindow} />
         </OSWindow>
       )}
 
@@ -1090,38 +1135,45 @@ function TerminalContent({
     if (normalized === "help") {
       output.push(
         { type: "output", text: "Available commands:" },
-        { type: "output", text: "help, ls, whoami, about, mission, date, clear" },
         {
           type: "output",
-          text: "open terminal, open links, open projects, open creator, open contact",
+          text: "help, ls, whoami, about, mission, date, clear",
         },
         {
           type: "output",
-          text: "close links, close projects, close creator, close contact, close all",
+          text: "open terminal, open links, open contact",
         },
         {
           type: "output",
-          text: "xp, matrix, lltech, youtube, gaming youtube, tech youtube, facebook, tiktok, linkedin",
+          text: "close links, close contact, close all",
+        },
+        {
+          type: "output",
+          text: "lltech, youtube, facebook, tiktok, linkedin",
+        },
+        {
+          type: "output",
+          text: "shortcuts: try `open all`, `home`, or `sudo make me famous`",
         },
       );
     } else if (normalized === "ls" || normalized === "dir") {
       output.push(
-        { type: "output", text: "business-systems/" },
+        { type: "output", text: "main-systems/" },
         { type: "output", text: "youtube-network/" },
         { type: "output", text: "social-profiles/" },
         { type: "output", text: "contact-channels/" },
         { type: "output", text: "terminal.app" },
-        { type: "output", text: "active-systems.monitor" },
+        { type: "output", text: "link-router.app" },
       );
     } else if (normalized === "whoami") {
       output.push({
         type: "success",
-        text: "Tate Byers — founder, developer, gamer, creator, builder.",
+        text: "Tate Byers '''''''' founder, developer, gamer, creator, builder.",
       });
     } else if (normalized === "about") {
       output.push({
         type: "output",
-        text: "TateByers.ca is a personal operating-system style portfolio for business links, creator channels, projects, and digital identity.",
+        text: "TateByers.ca is a personal operating-system style portfolio for business links, projects, and digital identity.",
       });
     } else if (normalized === "mission") {
       output.push({
@@ -1146,22 +1198,20 @@ function TerminalContent({
       normalized === "cd links"
     ) {
       onOpenWindow("links");
-      output.push({ type: "success", text: "Opened grouped link-router.app." });
-    } else if (
+      output.push({ type: "success", text: "Opened grouped link-router.app." });    } else if (
       normalized === "open projects" ||
       normalized === "projects" ||
-      normalized === "cd projects"
+      normalized === "cd projects" ||
+      normalized === "open systems" ||
+      normalized === "systems" ||
+      normalized === "showcase" ||
+      normalized === "cd systems"
     ) {
-      onOpenWindow("projects");
-      output.push({ type: "success", text: "Opened active-systems.monitor." });
-    } else if (
-      normalized === "open creator" ||
-      normalized === "creator" ||
-      normalized === "gaming" ||
-      normalized === "cd creator"
-    ) {
-      onOpenWindow("creator");
-      output.push({ type: "success", text: "Opened creator-mode.panel." });
+      onOpenWindow("links");
+      output.push({
+        type: "success",
+        text: "Systems showcase is organized inside My Links.",
+      });
     } else if (
       normalized === "open contact" ||
       normalized === "contact" ||
@@ -1178,36 +1228,43 @@ function TerminalContent({
     } else if (normalized === "close links") {
       onCloseWindow("links");
       output.push({ type: "success", text: "Closed link-router.app." });
-    } else if (normalized === "close projects") {
-      onCloseWindow("projects");
-      output.push({ type: "success", text: "Closed active-systems.monitor." });
-    } else if (normalized === "close creator") {
-      onCloseWindow("creator");
-      output.push({ type: "success", text: "Closed creator-mode.panel." });
     } else if (normalized === "close contact") {
       onCloseWindow("contact");
       output.push({ type: "success", text: "Closed open-channel.mail." });
+    } else if (normalized === "open all" || normalized === "launch all") {
+      onOpenWindow("terminal");
+      onOpenWindow("links");
+      onOpenWindow("contact");
+      output.push({
+        type: "success",
+        text: "Opened all Tate OS windows.",
+      });
+    } else if (normalized === "home" || normalized === "dashboard") {
+      onOpenWindow("terminal");
+      output.push({
+        type: "success",
+        text: "Dashboard command acknowledged. Terminal is active.",
+      });
     } else if (
       normalized === "close all" ||
       normalized === "kill all" ||
       normalized === "shutdown windows"
     ) {
       onCloseAll();
-      output.push({ type: "success", text: "Closed all windows. Desktop cleared." });
-    } else if (normalized === "xp" || normalized === "xp mode") {
-      if (theme === "xp") {
-        output.push({ type: "output", text: "Already running Tate XP." });
-      } else {
-        onToggleTheme();
-        output.push({ type: "success", text: "Switching to Tate XP..." });
-      }
-    } else if (normalized === "matrix" || normalized === "matrix mode") {
-      if (theme === "matrix") {
-        output.push({ type: "output", text: "Already running Matrix mode." });
-      } else {
-        onToggleTheme();
-        output.push({ type: "success", text: "Returning to Matrix mode..." });
-      }
+      output.push({
+        type: "success",
+        text: "Closed all windows. Desktop cleared.",
+      });
+    } else if (
+      normalized === "xp" ||
+      normalized === "xp mode" ||
+      normalized === "matrix" ||
+      normalized === "matrix mode"
+    ) {
+      output.push({
+        type: "success",
+        text: "Tate XP is the default shell. Matrix mode has been disabled.",
+      });
     } else if (
       normalized === "lltech" ||
       normalized === "l&l" ||
@@ -1225,25 +1282,9 @@ function TerminalContent({
       normalized === "open youtube"
     ) {
       openExternal(SOCIAL_URLS.youtubeMain);
-      output.push({ type: "success", text: "Opening main YouTube in a new tab." });
-    } else if (
-      normalized === "gaming youtube" ||
-      normalized === "open gaming youtube"
-    ) {
-      openExternal(SOCIAL_URLS.youtubeGaming);
       output.push({
         type: "success",
-        text: "Opening gaming YouTube in a new tab.",
-      });
-    } else if (
-      normalized === "tech youtube" ||
-      normalized === "builds youtube" ||
-      normalized === "open tech youtube"
-    ) {
-      openExternal(SOCIAL_URLS.youtubeTech);
-      output.push({
-        type: "success",
-        text: "Opening tech/builds YouTube in a new tab.",
+        text: "Opening main YouTube in a new tab.",
       });
     } else if (normalized === "facebook" || normalized === "open facebook") {
       openExternal(SOCIAL_URLS.facebook);
@@ -1352,7 +1393,13 @@ function TerminalContent({
   );
 }
 
-function LinksContent({ theme }: { theme: ThemeMode }) {
+function LinksContent({
+  theme,
+  onOpenWindow,
+}: {
+  theme: ThemeMode;
+  onOpenWindow: (id: WindowId) => void;
+}) {
   return (
     <div className="grid gap-5">
       {linkGroups.map((group) => (
@@ -1410,8 +1457,15 @@ function LinksContent({ theme }: { theme: ThemeMode }) {
                 <a
                   key={item.title}
                   href={item.href}
-                  target={isMail ? undefined : "_blank"}
-                  rel={isMail ? undefined : "noreferrer"}
+                  target={isMail || item.windowId ? undefined : "_blank"}
+                  rel={isMail || item.windowId ? undefined : "noopener noreferrer"}
+                  aria-label={`Open ${item.title}`}
+                  onClick={(event) => {
+                    if (!item.windowId) return;
+
+                    event.preventDefault();
+                    onOpenWindow(item.windowId);
+                  }}
                   className={cx(
                     "group rounded-xl border p-4 transition hover:-translate-y-0.5",
                     theme === "matrix"
@@ -1495,138 +1549,269 @@ function LinksContent({ theme }: { theme: ThemeMode }) {
 function ProjectsContent({ theme }: { theme: ThemeMode }) {
   return (
     <div className="grid gap-4">
-      {projects.map((project) => (
-        <div
-          key={project.title}
-          className={cx(
-            "rounded-xl border p-4",
-            theme === "matrix"
-              ? "border-green-400/15 bg-black/35"
-              : "border-[#b5b09a] bg-white",
-          )}
-        >
-          <div className="mb-3 flex items-start justify-between gap-4">
-            <div>
-              <p
-                className={cx(
-                  "font-bold",
-                  theme === "matrix" ? "text-green-100" : "text-[#1d1d1d]",
-                )}
-              >
-                {project.title}
-              </p>
-              <p
-                className={cx(
-                  "mt-1 font-mono text-[10px] font-black uppercase tracking-[0.2em]",
-                  theme === "matrix" ? "text-green-500" : "text-[#486e21]",
-                )}
-              >
-                {project.status}
-              </p>
-            </div>
-
-            <ShieldCheck
-              className={cx(
-                "size-5",
-                theme === "matrix" ? "text-green-400" : "text-[#174bb8]",
-              )}
-            />
-          </div>
-
-          <p
-            className={cx(
-              "text-sm leading-6",
-              theme === "matrix" ? "text-green-200/70" : "text-[#333333]",
-            )}
-          >
-            {project.description}
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className={cx(
-                  "rounded-full border px-3 py-1 font-mono text-[10px] font-bold",
-                  theme === "matrix"
-                    ? "border-green-400/15 bg-green-400/10 text-green-300"
-                    : "border-[#174bb8]/30 bg-[#d7e8ff] text-[#174bb8]",
-                )}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function CreatorContent({ theme }: { theme: ThemeMode }) {
-  return (
-    <div>
       <div
         className={cx(
-          "mb-5 grid size-14 place-items-center rounded-2xl border",
+          "rounded-xl border p-4",
           theme === "matrix"
-            ? "border-green-400/20 bg-green-400/10"
-            : "border-[#174bb8] bg-[#245edc]",
+            ? "border-green-400/15 bg-black/30"
+            : "border-[#b5b09a] bg-white",
         )}
       >
-        <Radio
+        <p
           className={cx(
-            "size-7",
-            theme === "matrix" ? "text-green-300" : "text-white",
+            "font-mono text-[10px] font-black uppercase tracking-[0.22em]",
+            theme === "matrix" ? "text-green-500" : "text-[#486e21]",
           )}
-        />
+        >
+          BRAND_SYSTEMS
+        </p>
+
+        <h2
+          className={cx(
+            "mt-2 text-2xl font-black",
+            theme === "matrix" ? "text-green-100" : "text-[#174bb8]",
+          )}
+        >
+          Business, apps, and personal links.
+        </h2>
+
+        <p
+          className={cx(
+            "mt-3 max-w-3xl text-sm leading-6",
+            theme === "matrix" ? "text-green-200/70" : "text-[#333333]",
+          )}
+        >
+          This is the central showcase for Tates real ecosystem - the business,
+          the TV platform, and the personal hub. Logo/photo slots are ready for
+          custom icons, brand marks, or screenshots.
+        </p>
       </div>
 
-      <h2
-        className={cx(
-          "text-2xl font-black",
-          theme === "matrix" ? "text-green-100" : "text-[#174bb8]",
-        )}
-      >
-        Creator Mode is warming up.
-      </h2>
+      <div className="grid gap-4">
+        {showcaseItems.map((item) => (
+          <article
+            key={item.title}
+            className={cx(
+              "group overflow-hidden rounded-2xl border transition hover:-translate-y-0.5",
+              theme === "matrix"
+                ? "border-green-400/15 bg-black/35 hover:border-green-300/35"
+                : "border-[#b5b09a] bg-white hover:border-[#174bb8]",
+            )}
+          >
+            <div className="grid gap-0 md:grid-cols-[190px_1fr]">
+              <div
+                className={cx(
+                  "flex min-h-40 items-center justify-center border-b p-5 md:border-b-0 md:border-r",
+                  theme === "matrix"
+                    ? "border-green-400/15 bg-green-950/15"
+                    : "border-[#b5b09a] bg-gradient-to-br from-[#d7e8ff] via-white to-[#ece9d8]",
+                )}
+              >
+                <div
+                  className={cx(
+                    "grid aspect-square w-full max-w-32 place-items-center rounded-3xl border text-center shadow-xl transition group-hover:scale-[1.02]",
+                    theme === "matrix"
+                      ? "border-green-300/25 bg-black/65 shadow-[0_0_35px_rgba(34,197,94,0.14)]"
+                      : "border-[#174bb8]/30 bg-white shadow-[0_16px_35px_rgba(23,75,184,0.16)]",
+                  )}
+                  aria-label={`${item.title} logo placeholder`}
+                >
+                  <div>
+                    <p
+                      className={cx(
+                        "text-4xl font-black tracking-tight",
+                        theme === "matrix" ? "text-green-300" : "text-[#174bb8]",
+                      )}
+                    >
+                      {item.logoText}
+                    </p>
+                    <p
+                      className={cx(
+                        "mt-1 font-mono text-[10px] font-black uppercase tracking-[0.24em]",
+                        theme === "matrix" ? "text-green-600" : "text-[#486e21]",
+                      )}
+                    >
+                      {item.logoSubtext}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-      <p
-        className={cx(
-          "mt-4 leading-7",
-          theme === "matrix" ? "text-green-200/75" : "text-[#333333]",
-        )}
-      >
-        This section is for gaming clips, TikTok content, YouTube uploads,
-        project breakdowns, behind-the-scenes tech work, and the weird creative
-        stuff that makes the personal brand feel alive.
-      </p>
+              <div className="p-5 sm:p-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p
+                      className={cx(
+                        "font-mono text-[10px] font-black uppercase tracking-[0.22em]",
+                        theme === "matrix" ? "text-green-500" : "text-[#486e21]",
+                      )}
+                    >
+                      {item.category}
+                    </p>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
-        <CreatorTag label="Gaming" theme={theme} />
-        <CreatorTag label="Tech" theme={theme} />
-        <CreatorTag label="Builds" theme={theme} />
+                    <h3
+                      className={cx(
+                        "mt-2 text-2xl font-black leading-tight",
+                        theme === "matrix" ? "text-green-100" : "text-[#1d1d1d]",
+                      )}
+                    >
+                      {item.title}
+                    </h3>
+
+                    <p
+                      className={cx(
+                        "mt-2 font-mono text-[10px] font-black uppercase tracking-[0.2em]",
+                        theme === "matrix" ? "text-green-500" : "text-[#486e21]",
+                      )}
+                    >
+                      {item.status}
+                    </p>
+                  </div>
+
+                  <ShieldCheck
+                    className={cx(
+                      "size-6 shrink-0",
+                      theme === "matrix" ? "text-green-400" : "text-[#174bb8]",
+                    )}
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <p
+                  className={cx(
+                    "mt-4 text-base leading-7",
+                    theme === "matrix" ? "text-green-200/75" : "text-[#333333]",
+                  )}
+                >
+                  {item.description}
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {item.tags.map((tag: string) => (
+                    <span
+                      key={tag}
+                      className={cx(
+                        "rounded-full border px-3 py-1.5 font-mono text-[10px] font-bold",
+                        theme === "matrix"
+                          ? "border-green-400/15 bg-green-400/10 text-green-300"
+                          : "border-[#174bb8]/30 bg-[#d7e8ff] text-[#174bb8]",
+                      )}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   );
 }
 
-function CreatorTag({ label, theme }: { label: string; theme: ThemeMode }) {
-  return (
-    <div
-      className={cx(
-        "rounded-xl border px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.2em]",
-        theme === "matrix"
-          ? "border-green-400/15 bg-black/35 text-green-300"
-          : "border-[#b5b09a] bg-white text-[#174bb8]",
-      )}
-    >
-      {label}
-    </div>
+function getContactInputClassName(theme: ThemeMode) {
+  return cx(
+    "w-full rounded-xl border px-4 py-3 text-sm outline-none transition placeholder:text-current/35 focus:ring-2",
+    theme === "matrix"
+      ? "border-green-400/15 bg-black/35 text-green-100 focus:border-green-300/45 focus:ring-green-300/20"
+      : "border-[#b5b09a] bg-white text-[#1d1d1d] focus:border-[#174bb8] focus:ring-[#174bb8]/20",
+  );
+}
+
+function getContactLabelClassName(theme: ThemeMode) {
+  return cx(
+    "mb-2 block font-mono text-[10px] font-black uppercase tracking-[0.18em]",
+    theme === "matrix" ? "text-green-500" : "text-[#486e21]",
   );
 }
 
 function ContactContent({ theme }: { theme: ThemeMode }) {
+  const [form, setForm] = useState<ContactFormState>({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    website: "",
+  });
+  const [status, setStatus] = useState<ContactSubmitStatus>("idle");
+  const [feedback, setFeedback] = useState(
+    "Send a message directly through Tate OS. No local email app required.",
+  );
+
+  const isSubmitting = status === "submitting";
+
+  function updateField(field: keyof ContactFormState, value: string) {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+
+    if (status !== "idle") {
+      setStatus("idle");
+      setFeedback(
+        "Send a message directly through Tate OS. No local email app required.",
+      );
+    }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      subject: form.subject.trim(),
+      message: form.message.trim(),
+      website: form.website.trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      setStatus("error");
+      setFeedback("Name, email, and message are required before sending.");
+      return;
+    }
+
+    setStatus("submitting");
+    setFeedback("Encrypting message packet and sending to Tate...");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        message?: string;
+      } | null;
+
+      if (!response.ok || !result?.ok) {
+        throw new Error(result?.message || "Message failed to send.");
+      }
+
+      setStatus("success");
+      setFeedback(result.message || "Message sent. Tate has been notified.");
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: "",
+      });
+    } catch (error) {
+      setStatus("error");
+      setFeedback(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Use the email-app fallback below.",
+      );
+    }
+  }
+
   return (
     <div>
       <p
@@ -1657,24 +1842,123 @@ function ContactContent({ theme }: { theme: ThemeMode }) {
         questions, or anything that should route through the main channel.
       </p>
 
-      <div className="mt-6 grid gap-3">
-        <a
-          href={SOCIAL_URLS.email}
+      <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label>
+            <span className={getContactLabelClassName(theme)}>Your Name</span>
+            <input
+              value={form.name}
+              onChange={(event) => updateField("name", event.target.value)}
+              className={getContactInputClassName(theme)}
+              placeholder="Jane Client"
+              autoComplete="name"
+              maxLength={120}
+              disabled={isSubmitting}
+            />
+          </label>
+
+          <label>
+            <span className={getContactLabelClassName(theme)}>Your Email</span>
+            <input
+              value={form.email}
+              onChange={(event) => updateField("email", event.target.value)}
+              className={getContactInputClassName(theme)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              inputMode="email"
+              maxLength={180}
+              disabled={isSubmitting}
+            />
+          </label>
+        </div>
+
+        <label>
+          <span className={getContactLabelClassName(theme)}>Subject</span>
+          <input
+            value={form.subject}
+            onChange={(event) => updateField("subject", event.target.value)}
+            className={getContactInputClassName(theme)}
+            placeholder="Website build, tech support, collab, etc."
+            maxLength={160}
+            disabled={isSubmitting}
+          />
+        </label>
+
+        <label>
+          <span className={getContactLabelClassName(theme)}>Message</span>
+          <textarea
+            value={form.message}
+            onChange={(event) => updateField("message", event.target.value)}
+            className={cx(getContactInputClassName(theme), "min-h-36 resize-y")}
+            placeholder="Tell me what you need, what timeline you have, and the best way to reply."
+            maxLength={5000}
+            disabled={isSubmitting}
+          />
+        </label>
+
+        <label className="hidden" aria-hidden="true">
+          <span>Website</span>
+          <input
+            value={form.website}
+            onChange={(event) => updateField("website", event.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </label>
+
+        <div
           className={cx(
-            "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5",
-            theme === "matrix"
-              ? "border-green-300/35 bg-green-400 text-black hover:bg-green-300"
-              : "border-[#103f91] bg-[#245edc] text-white hover:bg-[#174bb8]",
+            "rounded-xl border px-4 py-3 text-sm leading-6",
+            status === "success" &&
+              (theme === "matrix"
+                ? "border-emerald-300/30 bg-emerald-300/10 text-emerald-200"
+                : "border-[#2a7f16]/30 bg-[#e8f6df] text-[#2a7f16]"),
+            status === "error" &&
+              (theme === "matrix"
+                ? "border-red-300/30 bg-red-300/10 text-red-200"
+                : "border-[#b42318]/30 bg-[#fff0ef] text-[#b42318]"),
+            (status === "idle" || status === "submitting") &&
+              (theme === "matrix"
+                ? "border-green-400/15 bg-black/30 text-green-300/75"
+                : "border-[#b5b09a] bg-white text-[#333333]"),
           )}
+          role="status"
         >
-          <Mail className="mr-2 size-4" />
-          Email Tate
-        </a>
+          {feedback}
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={cx(
+              "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
+              theme === "matrix"
+                ? "border-green-300/35 bg-green-400 text-black hover:bg-green-300"
+                : "border-[#103f91] bg-[#245edc] text-white hover:bg-[#174bb8]",
+            )}
+          >
+            <Mail className="mr-2 size-4" />
+            {isSubmitting ? "Sending..." : "Send Message"}
+          </button>
+
+          <a
+            href={SOCIAL_URLS.email}
+            className={cx(
+              "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5",
+              theme === "matrix"
+                ? "border-green-400/20 bg-black/40 text-green-300 hover:border-green-300/45 hover:bg-green-400/10"
+                : "border-[#b5b09a] bg-white text-[#174bb8] hover:border-[#174bb8]",
+            )}
+          >
+            Open Email App
+          </a>
+        </div>
 
         <a
           href={SOCIAL_URLS.llTech}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className={cx(
             "inline-flex items-center justify-center rounded-xl border px-5 py-3 font-mono text-sm font-black uppercase tracking-[0.18em] transition hover:-translate-y-0.5",
             theme === "matrix"
@@ -1682,9 +1966,9 @@ function ContactContent({ theme }: { theme: ThemeMode }) {
               : "border-[#b5b09a] bg-white text-[#174bb8] hover:border-[#174bb8]",
           )}
         >
-          L&L Tech Solutions
+          L&amp;L Tech Solutions
         </a>
-      </div>
+      </form>
     </div>
   );
 }
@@ -1710,10 +1994,20 @@ function MatrixRain() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
 
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
     const context = canvas.getContext("2d");
+
     if (!context) return;
+
+    const drawingContext: CanvasRenderingContext2D = context;
 
     let animationFrame = 0;
     let width = window.innerWidth;
@@ -1726,10 +2020,14 @@ function MatrixRain() {
     );
 
     function resize() {
+      const activeCanvas = canvasRef.current;
+
+      if (!activeCanvas) return;
+
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+      activeCanvas.width = width;
+      activeCanvas.height = height;
       columns = Math.floor(width / fontSize);
       drops = Array.from({ length: columns }, () =>
         Math.floor(Math.random() * -100),
@@ -1737,12 +2035,10 @@ function MatrixRain() {
     }
 
     function draw() {
-      if (!context) return;
+      drawingContext.fillStyle = "rgba(0, 0, 0, 0.075)";
+      drawingContext.fillRect(0, 0, width, height);
 
-      context.fillStyle = "rgba(0, 0, 0, 0.075)";
-      context.fillRect(0, 0, width, height);
-
-      context.font = `${fontSize}px monospace`;
+      drawingContext.font = `${fontSize}px monospace`;
 
       for (let index = 0; index < drops.length; index += 1) {
         const phrase = phrases[index % phrases.length];
@@ -1751,8 +2047,9 @@ function MatrixRain() {
         const x = index * fontSize;
         const y = drops[index] * fontSize;
 
-        context.fillStyle = Math.random() > 0.975 ? "#d9ffe7" : "#22c55e";
-        context.fillText(char, x, y);
+        drawingContext.fillStyle =
+          Math.random() > 0.975 ? "#d9ffe7" : "#22c55e";
+        drawingContext.fillText(char, x, y);
 
         if (y > height && Math.random() > 0.975) {
           drops[index] = 0;
@@ -1861,20 +2158,44 @@ function LiveClock({ theme }: { theme: ThemeMode }) {
   );
 }
 
-function XPStickyNote() {
+function XPStickyNote({ onDismiss }: { onDismiss: () => void }) {
   return (
-    <div className="absolute right-5 top-5 z-20 hidden w-72 rotate-1 rounded-xl border border-yellow-600/30 bg-[#fff6a8] p-4 text-[#3a2f00] shadow-2xl lg:block">
-      <p className="text-sm font-black uppercase tracking-[0.14em]">
-        System Notes
-      </p>
-      <p className="mt-3 text-sm leading-6">
+    <aside
+      className="absolute right-5 top-5 z-20 hidden w-72 rotate-1 rounded-xl border border-yellow-600/30 bg-[#fff6a8] p-4 text-[#3a2f00] shadow-2xl transition hover:rotate-0 lg:block"
+      aria-label="Tate XP system notes"
+    >
+      <div className="mb-3 flex items-start justify-between gap-4">
+        <p className="text-sm font-black uppercase tracking-[0.14em]">
+          System Notes
+        </p>
+
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onDismiss();
+          }}
+          className="grid size-7 shrink-0 place-items-center rounded-lg border border-yellow-900/20 bg-yellow-950/10 text-sm font-black text-[#5d4c00] transition hover:bg-yellow-950/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-700/35"
+          aria-label="Close system notes"
+          title="Close system notes"
+        >
+          '''''
+        </button>
+      </div>
+
+      <p className="text-sm leading-6">
         Welcome to Tate XP. Click desktop icons, open windows, close apps, use
         the terminal, check links, and try not to delete the internet.
       </p>
+
       <p className="mt-4 font-mono text-xs text-[#6b5a00]">
         note: links are grouped like a real system directory
       </p>
-    </div>
+
+      <p className="mt-3 border-t border-yellow-900/15 pt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[#7a6500]">
+        auto-closes after 60 seconds
+      </p>
+    </aside>
   );
 }
 
@@ -1947,7 +2268,7 @@ function DesktopTopBar({
             }}
             className="rounded-lg border border-white/35 bg-white/15 px-3 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] text-white transition hover:bg-white/25"
           >
-            Return Matrix
+            Tate XP
           </button>
         </header>
 
@@ -2085,7 +2406,7 @@ function DesktopTopBar({
         }}
         className="rounded-xl border border-sky-300/30 bg-sky-400/10 px-3 py-2 font-mono text-[11px] font-black uppercase tracking-[0.16em] text-sky-200 transition hover:bg-sky-400/20"
       >
-        Enter XP Mode
+        Tate XP
       </button>
     </header>
   );
@@ -2152,7 +2473,7 @@ function OSWindow({
               aria-label={`Close ${title}`}
               title={`Close ${title}`}
             >
-              ×
+              '''''
             </button>
 
             <span

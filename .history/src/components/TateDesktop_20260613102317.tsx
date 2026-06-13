@@ -99,7 +99,7 @@ const SOCIAL_URLS = {
   facebook: "https://www.facebook.com/profile.php?id=61557129795810",
   tiktok: "https://www.tiktok.com/@lltechsolutions",
   linkedin: "https://www.linkedin.com/in/tatebyers/",
-  email: "mailto:tatebyers@protonmail.com",
+  email: "mailto:hello@tatebyers.ca",
 } as const;
 
 const windows: DesktopWindow[] = [
@@ -125,10 +125,10 @@ const windows: DesktopWindow[] = [
 
 const linkGroups: LinkGroup[] = [
   {
-    title: "My Business",
+    title: "Main Systems",
     systemName: "TATE_DIRECTORY",
     description:
-      "L&L Tech Solutions Business Website, & public-facing links organized in one place.",
+      "Business, personal hub, and public-facing links organized in one place.",
     links: [
       {
         title: "L&L Tech Solutions",
@@ -137,56 +137,55 @@ const linkGroups: LinkGroup[] = [
           "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
         href: SOCIAL_URLS.llTech,
         icon: BriefcaseBusiness,
-        },
-{
-        title: "L&L Tech Solutions YouTube",
-        label: "MAIN_YOUTUBE",
-        description:
-          "Long-form videos, gaming uploads, project logs, tutorials, and future content.",
-        href: SOCIAL_URLS.youtubeMain,
-        icon: Video,
       },
-
-        {
-        title: "L&L Tech Solutions TikTok",
-        label: "CLIP_ENGINE",
-        description:
-          "Gaming clips, tech projects, behind-the-scenes work, and creator content.",
-        href: SOCIAL_URLS.tiktok,
-        icon: Play,
-      },
-    ],
-  },
- {
-    title: "My Website Portfolios",
-    systemName: "TATE_DIRECTORY",
-    description:
-      "Business, personal hub, and public-facing links organized in one place.",
-    links: [
       {
         title: "Tates TV",
         label: "CREATOR_PLATFORM",
         description:
           "My custom live-TV style platform with channels, guide systems, themes, uploads, and creator-controlled media.",
-        href: "https://tatestv.ca",
+        href: "#",
         icon: Radio,
       },
       {
-  title: "Tow-N-Go Trailers",
-  label: "Website Development, SEO & Digital Growth Management",
-  description:
-    "Built and continue to manage Tow-N-Go TrailersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
-  href: "https://www.towandgotrailers.ca/",
-  icon: Monitor,
-},
-{
-  title: "Tow-N-Go Trailers",
-  label: "Website Development, SEO & Digital Growth Management",
-  description:
-    "Built and continue to manage Tow-N-Go TrailersÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ digital presence, including a custom premium website, trailer rental pages, SEO-focused content structure, rental inquiry form, local service-area optimization, Google Business Profile support, Facebook posting strategy, review response management, branded visuals, analytics tracking, and ongoing monthly updates designed to increase trust, visibility, and rental inquiries.",
-  href: "https://www.towandgotrailers.ca/",
-  icon: Monitor,
-},
+        title: "TateByers.ca",
+        label: "PERSONAL_HUB",
+        description:
+          "My personal home base for business links, contact, brand identity, and active systems.",
+        href: "https://www.tatebyers.ca",
+        icon: Monitor,
+      },
+    ],
+  },
+ {
+    title: "Main Systems",
+    systemName: "TATE_DIRECTORY",
+    description:
+      "Business, personal hub, and public-facing links organized in one place.",
+    links: [
+      {
+        title: "L&L Tech Solutions",
+        label: "BUSINESS_PORTAL",
+        description:
+          "My main technology business for websites, tech support, networking, CCTV, troubleshooting, and client systems.",
+        href: SOCIAL_URLS.llTech,
+        icon: BriefcaseBusiness,
+      },
+      {
+        title: "Tates TV",
+        label: "CREATOR_PLATFORM",
+        description:
+          "My custom live-TV style platform with channels, guide systems, themes, uploads, and creator-controlled media.",
+        href: "#",
+        icon: Radio,
+      },
+      {
+        title: "TateByers.ca",
+        label: "PERSONAL_HUB",
+        description:
+          "My personal home base for business links, contact, brand identity, and active systems.",
+        href: "https://www.tatebyers.ca",
+        icon: Monitor,
+      },
     ],
   },
 
@@ -212,6 +211,14 @@ const linkGroups: LinkGroup[] = [
     description:
       "Public-facing social platforms, business content, and professional profiles.",
     links: [
+      {
+        title: "L&L Tech Solutions TikTok",
+        label: "CLIP_ENGINE",
+        description:
+          "Gaming clips, tech projects, behind-the-scenes work, and creator content.",
+        href: SOCIAL_URLS.tiktok,
+        icon: Play,
+      },
       {
         title: "Tate Byers Facebook",
         label: "SOCIAL_FEED",
@@ -1449,7 +1456,7 @@ function LinksContent({
           </div>
 
           <div className="grid gap-3 p-3">
-            {group.links.map((item, itemIndex) => {
+            {group.links.map((item) => {
               const Icon = item.icon;
               const isMail = item.href.startsWith("mailto:");
 
