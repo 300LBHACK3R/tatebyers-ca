@@ -28,7 +28,7 @@ import type {
 } from "react";
 
 type ThemeMode = "matrix" | "xp";
-type WindowId = "terminal" | "links" | "projects" | "contact";
+type WindowId = "terminal" | "links" | "projects" | "creator" | "contact";
 
 type DesktopWindow = {
   id: WindowId;
@@ -96,6 +96,7 @@ type ContactSubmitStatus = "idle" | "submitting" | "success" | "error";
 const SOCIAL_URLS = {
   llTech: "https://lltechsolutions.ca",
   youtubeMain: "https://youtube.com/@LLTechSolutions/videos",
+  youtubeGaming: "https://www.youtube.com/@Tate-byers/videos",
   facebook: "https://www.facebook.com/profile.php?id=61557129795810",
   tiktok: "https://www.tiktok.com/@lltechsolutions",
   linkedin: "https://www.linkedin.com/in/tatebyers/",
@@ -116,6 +117,12 @@ const windows: DesktopWindow[] = [
     icon: Globe2,
   },
   {
+    id: "creator",
+    title: "Creator Mode",
+    subtitle: "Gaming + media",
+    icon: Gamepad2,
+  },
+  {
     id: "contact",
     title: "Open Channel",
     subtitle: "Contact Tate",
@@ -128,7 +135,7 @@ const linkGroups: LinkGroup[] = [
     title: "Main Systems",
     systemName: "TATE_DIRECTORY",
     description:
-      "Business, personal hub, and public-facing links organized in one place.",
+      "Business, creator systems, personal hub, and public-facing links organized in one place.",
     links: [
       {
         title: "L&L Tech Solutions",
@@ -143,14 +150,15 @@ const linkGroups: LinkGroup[] = [
         label: "CREATOR_PLATFORM",
         description:
           "My custom live-TV style platform with channels, guide systems, themes, uploads, and creator-controlled media.",
-        href: "#",
+        href: "#creator",
         icon: Radio,
+        windowId: "creator",
       },
       {
         title: "TateByers.ca",
         label: "PERSONAL_HUB",
         description:
-          "My personal home base for business links, contact, brand identity, and active systems.",
+          "My personal home base for business links, creator channels, contact, brand identity, and active systems.",
         href: "https://www.tatebyers.ca",
         icon: Monitor,
       },
@@ -169,6 +177,14 @@ const linkGroups: LinkGroup[] = [
           "Long-form videos, gaming uploads, project logs, tutorials, and future content.",
         href: SOCIAL_URLS.youtubeMain,
         icon: Video,
+      },
+      {
+        title: "Gaming YouTube",
+        label: "GAMING_ARCHIVE",
+        description:
+          "Gaming clips, highlights, uploads, future streams, and creator experiments.",
+        href: SOCIAL_URLS.youtubeGaming,
+        icon: Gamepad2,
       },
     ],
   },
@@ -248,7 +264,7 @@ const showcaseItems: ShowcaseItem[] = [
     status: "LIVE HUB",
     category: "Personal Operating System",
     description:
-      "My personal digital home base for business links, contact, brand identity, and active systems.",
+      "My personal digital home base for business links, creator channels, contact, brand identity, and active systems.",
     tags: ["Portfolio", "XP UI", "Personal Brand", "Contact Hub"],
     logoText: "TB",
     logoSubtext: ".CA",
@@ -259,7 +275,7 @@ const bootLines = [
   "Initializing Tate Portfolio System...",
   "Loading personal brand interface...",
   "Mounting /business/lltechsolutions...",
-  "Checking public links...",
+  "Checking creator channels...",
   "Starting desktop environment...",
   "Injecting caffeine into UI pipeline...",
   "Warning: normal portfolio templates rejected.",
@@ -376,7 +392,7 @@ export function TateDesktop() {
   }
 
   function openAllWindows() {
-    setOpenWindows(["terminal", "links", "contact"]);
+    setOpenWindows(["terminal", "links", "creator", "contact"]);
     setActiveWindow("contact");
     setStartOpen(false);
   }
@@ -395,6 +411,13 @@ export function TateDesktop() {
       subtitle: "Grouped router",
       icon: Globe2,
       action: () => openWindow("links"),
+    },
+    {
+      id: "creator",
+      label: "Gaming",
+      subtitle: "Creator mode",
+      icon: Gamepad2,
+      action: () => openWindow("creator"),
     },
     {
       id: "contact",
@@ -1026,6 +1049,19 @@ function WindowLayer({
         </OSWindow>
       )}
 
+      {openWindows.includes("creator") && (
+        <OSWindow
+          title="creator-mode.panel"
+          subtitle="gaming/media"
+          isActive={activeWindow === "creator"}
+          theme={theme}
+          onFocus={() => onFocusWindow("creator")}
+          onClose={() => onCloseWindow("creator")}
+        >
+          <CreatorContent theme={theme} />
+        </OSWindow>
+      )}
+
       {openWindows.includes("contact") && (
         <OSWindow
           title="open-channel.mail"
@@ -1115,15 +1151,15 @@ function TerminalContent({
         },
         {
           type: "output",
-          text: "open terminal, open links, open contact",
+          text: "open terminal, open links, open creator, open contact",
         },
         {
           type: "output",
-          text: "close links, close contact, close all",
+          text: "close links, close projects, close creator, close contact, close all",
         },
         {
           type: "output",
-          text: "lltech, youtube, facebook, tiktok, linkedin",
+          text: "lltech, youtube, gaming youtube, facebook, tiktok, linkedin",
         },
         {
           type: "output",
@@ -1147,7 +1183,7 @@ function TerminalContent({
     } else if (normalized === "about") {
       output.push({
         type: "output",
-        text: "TateByers.ca is a personal operating-system style portfolio for business links, projects, and digital identity.",
+        text: "TateByers.ca is a personal operating-system style portfolio for business links, creator channels, projects, and digital identity.",
       });
     } else if (normalized === "mission") {
       output.push({
@@ -1187,6 +1223,14 @@ function TerminalContent({
         text: "Systems showcase is organized inside My Links.",
       });
     } else if (
+      normalized === "open creator" ||
+      normalized === "creator" ||
+      normalized === "gaming" ||
+      normalized === "cd creator"
+    ) {
+      onOpenWindow("creator");
+      output.push({ type: "success", text: "Opened creator-mode.panel." });
+    } else if (
       normalized === "open contact" ||
       normalized === "contact" ||
       normalized === "email" ||
@@ -1202,12 +1246,20 @@ function TerminalContent({
     } else if (normalized === "close links") {
       onCloseWindow("links");
       output.push({ type: "success", text: "Closed link-router.app." });
+    } else if (normalized === "close projects") {
+      onCloseWindow("projects");
+      output.push({ type: "success", text: "Closed link-router.app." });
+    } else if (normalized === "close creator") {
+      onCloseWindow("creator");
+      output.push({ type: "success", text: "Closed creator-mode.panel." });
     } else if (normalized === "close contact") {
       onCloseWindow("contact");
       output.push({ type: "success", text: "Closed open-channel.mail." });
     } else if (normalized === "open all" || normalized === "launch all") {
       onOpenWindow("terminal");
       onOpenWindow("links");
+      onOpenWindow("projects");
+      onOpenWindow("creator");
       onOpenWindow("contact");
       output.push({
         type: "success",
@@ -1259,6 +1311,15 @@ function TerminalContent({
       output.push({
         type: "success",
         text: "Opening main YouTube in a new tab.",
+      });
+    } else if (
+      normalized === "gaming youtube" ||
+      normalized === "open gaming youtube"
+    ) {
+      openExternal(SOCIAL_URLS.youtubeGaming);
+      output.push({
+        type: "success",
+        text: "Opening gaming YouTube in a new tab.",
       });
     } else if (normalized === "facebook" || normalized === "open facebook") {
       openExternal(SOCIAL_URLS.facebook);
@@ -1680,6 +1741,69 @@ function ProjectsContent({ theme }: { theme: ThemeMode }) {
           </article>
         ))}
       </div>
+    </div>
+  );
+}
+
+function CreatorContent({ theme }: { theme: ThemeMode }) {
+  return (
+    <div>
+      <div
+        className={cx(
+          "mb-5 grid size-14 place-items-center rounded-2xl border",
+          theme === "matrix"
+            ? "border-green-400/20 bg-green-400/10"
+            : "border-[#174bb8] bg-[#245edc]",
+        )}
+      >
+        <Radio
+          className={cx(
+            "size-7",
+            theme === "matrix" ? "text-green-300" : "text-white",
+          )}
+        />
+      </div>
+
+      <h2
+        className={cx(
+          "text-2xl font-black",
+          theme === "matrix" ? "text-green-100" : "text-[#174bb8]",
+        )}
+      >
+        Creator Mode is warming up.
+      </h2>
+
+      <p
+        className={cx(
+          "mt-4 leading-7",
+          theme === "matrix" ? "text-green-200/75" : "text-[#333333]",
+        )}
+      >
+        This section is for gaming clips, TikTok content, YouTube uploads,
+        project breakdowns, behind-the-scenes tech work, and the weird creative
+        stuff that makes the personal brand feel alive.
+      </p>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <CreatorTag label="Gaming" theme={theme} />
+        <CreatorTag label="Tech" theme={theme} />
+        <CreatorTag label="Builds" theme={theme} />
+      </div>
+    </div>
+  );
+}
+
+function CreatorTag({ label, theme }: { label: string; theme: ThemeMode }) {
+  return (
+    <div
+      className={cx(
+        "rounded-xl border px-4 py-3 text-center font-mono text-xs font-black uppercase tracking-[0.2em]",
+        theme === "matrix"
+          ? "border-green-400/15 bg-black/35 text-green-300"
+          : "border-[#b5b09a] bg-white text-[#174bb8]",
+      )}
+    >
+      {label}
     </div>
   );
 }
