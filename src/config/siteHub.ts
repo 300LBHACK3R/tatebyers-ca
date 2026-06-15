@@ -18,15 +18,10 @@ export type LinkCollection = {
   links: HubLink[];
 };
 
-export type SiteSuggestion = {
-  title: string;
-  description: string;
-};
-
 export const profile = {
   name: "Tate Byers",
   headline:
-    "A personal hub for my business, projects, links, public memories, and creative work.",
+    "A premium personal hub for my business, projects, links, and selected public memories.",
   location: "Calgary, Alberta, Canada",
   email: "tatebyers06@gmail.com",
   mainImage: "/images/profile/tate-main.jpg",
@@ -94,63 +89,9 @@ export const linkCollections: LinkCollection[] = [
         href: "https://tatestv.ca",
       },
       {
-        title: "Project Contact",
+        title: "Contact Tate",
         label: "Contact",
         description: "Contact me about Tates TV updates, ideas, or development.",
-        href: "mailto:tatebyers06@gmail.com",
-      }
-    ],
-  },
-  {
-    slug: "creator-projects",
-    title: "Creator Projects",
-    label: "Projects",
-    description:
-      "A place for future brands, videos, music, experiments, side projects, and creative launches.",
-    image: "/images/logos/creator-projects.jpg",
-    initials: "CP",
-    highlights: ["Creative Work", "Future Brands", "Media", "Ideas"],
-    links: [
-      {
-        title: "Project Archive",
-        label: "Coming Soon",
-        description: "Future home for creator projects, screenshots, updates, and launches.",
-        href: "mailto:tatebyers06@gmail.com",
-      }
-    ],
-  },
-  {
-    slug: "personal-family",
-    title: "Personal and Family",
-    label: "Selected Memories",
-    description:
-      "A public-friendly area for selected memories, family moments, photos, and personal updates.",
-    image: "/images/logos/personal-family.jpg",
-    initials: "PF",
-    highlights: ["Photos", "Memories", "Family", "Life"],
-    links: [
-      {
-        title: "Public Albums",
-        label: "Coming Soon",
-        description: "Selected public albums and memories. Private family content should stay protected.",
-        href: "mailto:tatebyers06@gmail.com",
-      }
-    ],
-  },
-  {
-    slug: "hobbies-interests",
-    title: "Hobbies and Interests",
-    label: "Personal Side",
-    description:
-      "Collectibles, media, music, finds, ideas, and the personal interests I want to organize over time.",
-    image: "/images/logos/hobbies.jpg",
-    initials: "HI",
-    highlights: ["Collectibles", "Media", "Music", "Finds"],
-    links: [
-      {
-        title: "Hobby Archive",
-        label: "Coming Soon",
-        description: "Future space for collectibles, finds, media, and personal interests.",
         href: "mailto:tatebyers06@gmail.com",
       }
     ],
@@ -160,7 +101,7 @@ export const linkCollections: LinkCollection[] = [
     title: "Socials and Contact",
     label: "Main Links",
     description:
-      "Fast access to my contact information, social platforms, and public profiles.",
+      "Fast access to my contact information, public profiles, and social platforms.",
     image: "/images/logos/socials-contact.jpg",
     initials: "@",
     highlights: ["Email", "Socials", "Profiles", "Contact"],
@@ -190,34 +131,6 @@ export const linkCollections: LinkCollection[] = [
         href: "https://www.youtube.com/",
       }
     ],
-  },
-];
-
-export const strongSuggestions: SiteSuggestion[] = [
-  {
-    title: "Add real brand logos for every section",
-    description:
-      "Use matching square logo images for Tates TV, Creator Projects, Family, Hobbies, and Socials so the hub feels complete and branded.",
-  },
-  {
-    title: "Build a public photo albums area",
-    description:
-      "Add selected public albums for work, memories, hobbies, and family-friendly moments while keeping private family photos off the public web.",
-  },
-  {
-    title: "Add proof for L&L Tech Solutions",
-    description:
-      "Add screenshots, project examples, service highlights, before-and-after photos, reviews, and trust badges to make the business section stronger.",
-  },
-  {
-    title: "Add a custom contact form",
-    description:
-      "Keep email links, but add a polished form for business inquiries so visitors can contact you without opening their email app.",
-  },
-  {
-    title: "Add analytics and search tracking",
-    description:
-      "Track which cards people click, which sections are popular, and what content should be improved for Google and client outreach.",
   },
 ];
 

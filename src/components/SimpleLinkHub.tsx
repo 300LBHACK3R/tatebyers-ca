@@ -1,5 +1,5 @@
 ﻿import Link from "next/link";
-import { linkCollections, profile, strongSuggestions } from "@/config/siteHub";
+import { linkCollections, profile } from "@/config/siteHub";
 
 function ArrowIcon() {
   return (
@@ -85,28 +85,6 @@ function SectionLabel({
   );
 }
 
-function SuggestionCard({
-  number,
-  title,
-  description,
-}: {
-  number: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <article className="electric-card rounded-[1.75rem] p-[1px]">
-      <div className="h-full rounded-[1.72rem] bg-[#080808]/95 p-5">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-[#ff5b66]">
-          {number}
-        </p>
-        <h3 className="mt-3 text-lg font-black text-white">{title}</h3>
-        <p className="mt-3 text-sm leading-7 text-white/68">{description}</p>
-      </div>
-    </article>
-  );
-}
-
 export function SimpleLinkHub() {
   const featured = linkCollections.find((collection) => collection.featured) ?? linkCollections[0];
   const secondaryCollections = linkCollections.filter(
@@ -155,8 +133,8 @@ export function SimpleLinkHub() {
           <section className="mt-12">
             <SectionLabel
               eyebrow="Featured"
-              title="Main business"
-              body="The primary business brand and the first place for professional services."
+              title="Main Business"
+              body="The primary brand for professional technology services."
             />
 
             <div className="electric-card rounded-[2rem] p-[1px]">
@@ -181,7 +159,7 @@ export function SimpleLinkHub() {
                       href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="group/title mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b] sm:text-4xl"
+                      className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b] sm:text-4xl"
                     >
                       {featured.title}
                       <ExternalIcon />
@@ -209,7 +187,7 @@ export function SimpleLinkHub() {
                         href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-2xl bg-[#111111] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:bg-[#b70f1b]"
+                        className="inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(183,15,27,0.32)] transition hover:-translate-y-0.5 hover:bg-[#111111]"
                       >
                         Website
                         <ExternalIcon />
@@ -244,66 +222,49 @@ export function SimpleLinkHub() {
             </div>
           </section>
 
-          <section className="mt-10">
-            <SectionLabel
-              eyebrow="Directory"
-              title="Sections"
-              body="Choose a category below to open the links, projects, photos, or personal areas connected to it."
-            />
+          {secondaryCollections.length > 0 ? (
+            <section className="mt-10">
+              <SectionLabel
+                eyebrow="Explore"
+                title="More from Tate"
+                body="A simple place to find the other active links connected to my work and public projects."
+              />
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {secondaryCollections.map((collection) => (
-                <Link
-                  key={collection.slug}
-                  href={`/links/${collection.slug}`}
-                  className="electric-card group rounded-[1.8rem] p-[1px]"
-                >
-                  <div className="flex h-full items-center justify-between gap-4 rounded-[1.75rem] bg-[#090909]/94 p-5 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl transition group-hover:bg-[#101010]">
-                    <div className="flex min-w-0 items-center gap-4">
-                      <VisualTile title={collection.title} image={collection.image} initials={collection.initials} />
+              <div className="grid gap-4 md:grid-cols-2">
+                {secondaryCollections.map((collection) => (
+                  <Link
+                    key={collection.slug}
+                    href={`/links/${collection.slug}`}
+                    className="electric-card group rounded-[1.8rem] p-[1px]"
+                  >
+                    <div className="flex h-full items-center justify-between gap-4 rounded-[1.75rem] bg-[#090909]/94 p-5 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl transition group-hover:bg-[#101010]">
+                      <div className="flex min-w-0 items-center gap-4">
+                        <VisualTile title={collection.title} image={collection.image} initials={collection.initials} />
 
-                      <div className="min-w-0">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5b66]">
-                          {collection.label}
-                        </p>
+                        <div className="min-w-0">
+                          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5b66]">
+                            {collection.label}
+                          </p>
 
-                        <h3 className="mt-1 text-xl font-black leading-tight text-white">
-                          {collection.title}
-                        </h3>
+                          <h3 className="mt-1 text-xl font-black leading-tight text-white">
+                            {collection.title}
+                          </h3>
 
-                        <p className="mt-2 text-sm leading-7 text-white/68">
-                          {collection.description}
-                        </p>
+                          <p className="mt-2 text-sm leading-7 text-white/68">
+                            {collection.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/8 text-white transition group-hover:scale-105 group-hover:bg-[#b70f1b]">
+                        <ArrowIcon />
                       </div>
                     </div>
-
-                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/8 text-white transition group-hover:scale-105 group-hover:bg-[#b70f1b]">
-                      <ArrowIcon />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-
-          <section className="mt-10">
-            <SectionLabel
-              eyebrow="Next improvements"
-              title="Strong suggestions"
-              body="The next upgrades that will make this hub more useful, more trustworthy, and easier to grow."
-            />
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {strongSuggestions.map((suggestion, index) => (
-                <SuggestionCard
-                  key={suggestion.title}
-                  number={`Suggestion ${String(index + 1).padStart(2, "0")}`}
-                  title={suggestion.title}
-                  description={suggestion.description}
-                />
-              ))}
-            </div>
-          </section>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           <footer className="py-12 text-center text-sm leading-7 text-white/48">
             <p>
