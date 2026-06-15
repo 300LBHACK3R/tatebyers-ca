@@ -1,9 +1,5 @@
-import { TateDesktop } from "@/components/TateDesktop";
+﻿import { SimpleLinkHub } from "@/components/SimpleLinkHub";
 
 export default function HomePage() {
-  return (
-    <main>
-      <TateDesktop />
-    </main>
-  );
+  return <SimpleLinkHub />;
 }
