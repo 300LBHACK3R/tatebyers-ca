@@ -1,41 +1,29 @@
-import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site";
+﻿import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: siteConfig.name,
-    short_name: "Tate",
-    description: siteConfig.description,
-
-    id: "/",
+    name: "Tate Byers Premium Hub",
+    short_name: "Tate Hub",
+    description:
+      "Premium personal hub for Tate Byers, L&L Tech Solutions, projects, links, and selected memories.",
     start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait-primary",
-
-    background_color: "#050816",
-    theme_color: "#050816",
-
-    categories: ["business", "productivity", "portfolio"],
-    lang: "en-CA",
-
+    background_color: "#050505",
+    theme_color: "#b70f1b",
     icons: [
       {
-        src: "/favicon.ico",
-        sizes: "32x32",
-        type: "image/x-icon",
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any maskable",
       },
       {
-        src: "/icon.png",
+        src: "/icon-512.png",
         sizes: "512x512",
         type: "image/png",
-        purpose: "maskable",
-      },
-      {
-        src: "/apple-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-        purpose: "any",
+        purpose: "any maskable",
       },
     ],
   };
