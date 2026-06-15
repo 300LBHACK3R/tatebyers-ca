@@ -363,3 +363,66 @@ body::after {
     animation: none;
   }
 }
+
+/* Premium Tate Hub stronger electric accents */
+.electric-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,0.24), rgba(255,255,255,0.06) 14%, rgba(183,15,27,0.76) 30%, rgba(255,91,102,1) 44%, rgba(212,175,55,0.85) 50%, rgba(255,91,102,0.95) 58%, rgba(183,15,27,0.72) 70%, rgba(255,255,255,0.08) 86%, rgba(255,255,255,0.24)),
+    linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.05));
+  background-size: 280% 280%, 100% 100%;
+  animation: electric-border-flow 5.5s linear infinite;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 0 28px rgba(183,15,27,0.22),
+    0 0 58px rgba(255,36,55,0.12);
+}
+
+.electric-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 73, 88, 0.95), transparent 18%),
+    radial-gradient(circle at 80% 24%, rgba(212, 175, 55, 0.5), transparent 16%),
+    radial-gradient(circle at 32% 88%, rgba(255, 40, 58, 0.54), transparent 20%);
+  opacity: 0.36;
+  filter: blur(12px);
+  animation: electric-pulse 3.2s ease-in-out infinite alternate;
+}
+
+.electric-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 0 32px rgba(255,36,55,0.32),
+    0 0 78px rgba(212,175,55,0.16);
+}
+
+@keyframes electric-border-flow {
+  0% {
+    background-position: 0% 50%, 0 0;
+  }
+  100% {
+    background-position: 280% 50%, 0 0;
+  }
+}
+
+@keyframes electric-pulse {
+  0% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.52;
+    transform: scale(1.025);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .electric-card,
+  .electric-card::before {
+    animation: none;
+  }
+}

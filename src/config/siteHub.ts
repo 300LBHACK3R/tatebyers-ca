@@ -14,6 +14,7 @@ export type LinkCollection = {
   initials: string;
   featured?: boolean;
   highlights?: string[];
+  primaryHref?: string;
   links: HubLink[];
 };
 
@@ -41,25 +42,20 @@ export const linkCollections: LinkCollection[] = [
     image: "/images/logos/ll-tech.jpg",
     initials: "L&L",
     featured: true,
+    primaryHref: "https://lltechsolutions.ca",
     highlights: ["Websites", "Tech Support", "Networking", "CCTV"],
     links: [
       {
-        title: "Official Website",
-        label: "Website",
+        title: "Website",
+        label: "Official Site",
         description: "Visit the main L&L Tech Solutions website.",
         href: "https://lltechsolutions.ca",
       },
       {
-        title: "Email L&L Tech Solutions",
-        label: "Contact",
-        description: "Reach out for websites, tech support, networking, CCTV, or client systems.",
-        href: "mailto:tatebyers06@gmail.com",
-      },
-      {
-        title: "Facebook",
-        label: "Social",
-        description: "Business updates, local posts, service content, and public updates.",
-        href: "https://www.facebook.com/",
+        title: "YouTube",
+        label: "Video",
+        description: "Project videos, tutorials, service content, and future uploads.",
+        href: "https://www.youtube.com/",
       },
       {
         title: "TikTok",
@@ -68,10 +64,16 @@ export const linkCollections: LinkCollection[] = [
         href: "https://www.tiktok.com/",
       },
       {
-        title: "YouTube",
-        label: "Video",
-        description: "Project videos, tutorials, service content, and future uploads.",
-        href: "https://www.youtube.com/",
+        title: "Facebook",
+        label: "Social",
+        description: "Business updates, local posts, service content, and public updates.",
+        href: "https://www.facebook.com/",
+      },
+      {
+        title: "Email",
+        label: "Contact",
+        description: "Reach out for websites, tech support, networking, CCTV, or client systems.",
+        href: "mailto:tatebyers06@gmail.com",
       }
     ],
   },

@@ -15,6 +15,20 @@ function ArrowIcon() {
   );
 }
 
+function ExternalIcon() {
+  return (
+    <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M7 17L17 7M17 7H9M17 7V15"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function VisualTile({
   title,
   image,
@@ -29,11 +43,11 @@ function VisualTile({
   return (
     <div
       className={[
-        "relative grid shrink-0 place-items-center overflow-hidden rounded-[2rem] border border-white/15 bg-gradient-to-br from-white via-[#f5f5f5] to-[#d6d6d6] shadow-[0_24px_55px_rgba(0,0,0,0.45)]",
+        "relative grid shrink-0 place-items-center overflow-hidden rounded-[2rem] border border-white/15 bg-gradient-to-br from-white via-[#f8f3e8] to-[#c7a85a] shadow-[0_24px_55px_rgba(0,0,0,0.45)]",
         large ? "h-32 w-32 p-3 sm:h-40 sm:w-40" : "h-20 w-20 p-2.5 sm:h-24 sm:w-24",
       ].join(" ")}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.75),transparent_42%,rgba(255,255,255,0.22))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.86),transparent_40%,rgba(255,255,255,0.22))]" />
       {image ? (
         <img
           src={image}
@@ -99,14 +113,19 @@ export function SimpleLinkHub() {
     (collection) => collection.slug !== featured.slug,
   );
 
+  const featuredWebsite = featured.links.find((link) => link.title.toLowerCase().includes("website"));
+  const featuredSocialLinks = featured.links.filter((link) =>
+    ["youtube", "tiktok", "facebook"].includes(link.title.toLowerCase()),
+  );
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#050505] text-white">
       <div className="pointer-events-none fixed inset-0">
-        <div className="absolute left-1/2 top-[-300px] h-[650px] w-[650px] -translate-x-1/2 rounded-full bg-[#b70f1b]/38 blur-3xl" />
-        <div className="absolute right-[-220px] top-[18%] h-[520px] w-[520px] rounded-full bg-[#ff2437]/18 blur-3xl" />
-        <div className="absolute left-[-240px] bottom-[6%] h-[500px] w-[500px] rounded-full bg-white/7 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.13),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.025),rgba(0,0,0,0.9))]" />
-        <div className="absolute inset-0 opacity-[0.055] [background-image:linear-gradient(rgba(255,255,255,.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.6)_1px,transparent_1px)] [background-size:34px_34px]" />
+        <div className="absolute left-1/2 top-[-300px] h-[650px] w-[650px] -translate-x-1/2 rounded-full bg-[#b70f1b]/40 blur-3xl" />
+        <div className="absolute right-[-220px] top-[18%] h-[520px] w-[520px] rounded-full bg-[#ff2437]/22 blur-3xl" />
+        <div className="absolute left-[-240px] bottom-[6%] h-[500px] w-[500px] rounded-full bg-[#d4af37]/10 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.025),rgba(0,0,0,0.9))]" />
+        <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.6)_1px,transparent_1px)] [background-size:34px_34px]" />
       </div>
 
       <section className="relative mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 lg:py-14">
@@ -141,23 +160,34 @@ export function SimpleLinkHub() {
             />
 
             <div className="electric-card rounded-[2rem] p-[1px]">
-              <Link
-                href={`/links/${featured.slug}`}
-                className="group block rounded-[1.95rem] border border-white/8 bg-gradient-to-br from-white via-[#f8f8f8] to-[#e7e7e7] p-5 text-[#101010] shadow-[0_30px_70px_rgba(0,0,0,0.36)] transition hover:-translate-y-0.5 sm:p-6"
-              >
+              <article className="rounded-[1.95rem] border border-white/8 bg-gradient-to-br from-white via-[#fffaf0] to-[#f0f0f0] p-5 text-[#101010] shadow-[0_30px_70px_rgba(0,0,0,0.36)] sm:p-6">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-                  <VisualTile title={featured.title} image={featured.image} initials={featured.initials} />
+                  <a
+                    href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="transition hover:scale-[1.03]"
+                    aria-label={`Open ${featured.title}`}
+                  >
+                    <VisualTile title={featured.title} image={featured.image} initials={featured.initials} />
+                  </a>
 
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-black uppercase tracking-[0.2em] text-[#b70f1b]">
                       {featured.label}
                     </p>
 
-                    <h2 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">
+                    <a
+                      href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group/title mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b] sm:text-4xl"
+                    >
                       {featured.title}
-                    </h2>
+                      <ExternalIcon />
+                    </a>
 
-                    <p className="mt-3 text-sm leading-7 text-[#444] sm:text-base">
+                    <p className="mt-3 text-sm leading-7 text-[#333333] sm:text-base">
                       {featured.description}
                     </p>
 
@@ -173,21 +203,52 @@ export function SimpleLinkHub() {
                         ))}
                       </div>
                     ) : null}
+
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      <a
+                        href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-2xl bg-[#111111] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:bg-[#b70f1b]"
+                      >
+                        Website
+                        <ExternalIcon />
+                      </a>
+
+                      {featuredSocialLinks.map((link) => (
+                        <a
+                          key={`${featured.slug}-${link.title}`}
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-2xl border border-[#b70f1b]/20 bg-white px-4 py-3 text-sm font-black text-[#b70f1b] shadow-sm transition hover:-translate-y-0.5 hover:border-[#d4af37]/40 hover:bg-[#fff7e0] hover:text-[#7a0a12]"
+                        >
+                          {link.title}
+                          <ExternalIcon />
+                        </a>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#111] text-white transition group-hover:scale-105 group-hover:bg-[#b70f1b]">
+                  <a
+                    href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#b70f1b] text-white shadow-[0_16px_35px_rgba(183,15,27,0.35)] transition hover:scale-105 hover:bg-[#111111]"
+                    aria-label={`Open ${featured.title} website`}
+                  >
                     <ArrowIcon />
-                  </div>
+                  </a>
                 </div>
-              </Link>
+              </article>
             </div>
           </section>
 
           <section className="mt-10">
             <SectionLabel
               eyebrow="Directory"
-              title="Organized sections"
-              body="Everything is grouped clearly so visitors can choose what they want without hunting around."
+              title="Sections"
+              body="Choose a category below to open the links, projects, photos, or personal areas connected to it."
             />
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -229,7 +290,7 @@ export function SimpleLinkHub() {
             <SectionLabel
               eyebrow="Next improvements"
               title="Strong suggestions"
-              body="These are the upgrades that will make this hub more useful, more trustworthy, and easier to grow."
+              body="The next upgrades that will make this hub more useful, more trustworthy, and easier to grow."
             />
 
             <div className="grid gap-4 md:grid-cols-2">
