@@ -1,173 +1,87 @@
-import type { Metadata, Viewport } from "next";
-import type { ReactNode } from "react";
-import { Inter } from "next/font/google";
+﻿import type { Metadata, Viewport } from "next";
+import { PWAInstaller } from "@/components/PWAInstaller";
 import "./globals.css";
-import { siteConfig } from "@/lib/site";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
-function getBaseUrl() {
-  return siteConfig.domain.replace(/\/$/, "");
-}
-
-function getBusinessName() {
-  if ("business" in siteConfig && siteConfig.business?.name) {
-    return siteConfig.business.name;
-  }
-
-  if ("businessName" in siteConfig && siteConfig.businessName) {
-    return siteConfig.businessName;
-  }
-
-  return "L&L Tech Solutions";
-}
-
-function getBusinessUrl() {
-  if ("business" in siteConfig && siteConfig.business?.url) {
-    return siteConfig.business.url;
-  }
-
-  if ("businessUrl" in siteConfig && siteConfig.businessUrl) {
-    return siteConfig.businessUrl;
-  }
-
-  return "https://lltechsolutions.ca";
-}
-
-const baseUrl = getBaseUrl();
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL("https://www.tatebyers.ca"),
   title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
+    default: "Tate Byers | Premium Personal Hub",
+    template: "%s | Tate Byers",
   },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  authors: [{ name: siteConfig.creator }],
-  creator: siteConfig.creator,
-  publisher: siteConfig.creator,
-  category: "technology",
+  description:
+    "Premium personal hub for Tate Byers, L&L Tech Solutions, business links, creator projects, public memories, and contact information.",
+  applicationName: "Tate Byers Premium Hub",
+  appleWebApp: {
+    capable: true,
+    title: "Tate Hub",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  manifest: "/manifest.webmanifest",
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "Tate Byers",
     "L&L Tech Solutions",
-    "Calgary tech services",
-    "Calgary web developer",
-    "website design",
-    "custom websites",
-    "tech support",
-    "gaming creator",
-    "tech creator",
-    "personal brand",
-    "digital projects",
-    "Next.js portfolio",
+    "Calgary tech support",
+    "website design Calgary",
+    "tech support Calgary",
+    "networking Calgary",
+    "CCTV Calgary",
+    "personal portfolio",
+    "creator projects",
+    "Tates TV"
   ],
+  authors: [{ name: "Tate Byers" }],
+  creator: "Tate Byers",
+  publisher: "L&L Tech Solutions",
   openGraph: {
-    title: siteConfig.title,
-    description: siteConfig.description,
-    url: baseUrl,
-    siteName: siteConfig.name,
+    type: "website",
+    locale: "en_CA",
+    url: "https://www.tatebyers.ca",
+    siteName: "Tate Byers",
+    title: "Tate Byers | Premium Personal Hub",
+    description:
+      "Business links, creator projects, contact information, and selected memories organized in one premium personal hub.",
     images: [
       {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Tate Byers personal tech, gaming, business, and digital project hub.",
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Tate Byers Premium Hub",
       },
     ],
-    locale: "en_CA",
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: ["/opengraph-image.png"],
+    title: "Tate Byers | Premium Personal Hub",
+    description:
+      "Business links, creator projects, contact information, and selected memories organized in one premium personal hub.",
+    images: ["/icon-512.png"],
   },
-  alternates: {
-    canonical: baseUrl,
-  },
-  icons: {
-    icon: [
-      {
-        url: "/favicon.ico",
-        sizes: "32x32",
-      },
-      {
-        url: "/icon.png",
-        sizes: "512x512",
-        type: "image/png",
-      },
-    ],
-    apple: [
-      {
-        url: "/apple-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-  },
-  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050816",
+  themeColor: "#b70f1b",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: ReactNode;
+  children: React.ReactNode;
 }>) {
-  const businessName = getBusinessName();
-  const businessUrl = getBusinessUrl();
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.name,
-    url: baseUrl,
-    description: siteConfig.description,
-    jobTitle: "Founder, Developer, Creator",
-    email: `mailto:${siteConfig.email}`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Calgary",
-      addressRegion: "AB",
-      addressCountry: "CA",
-    },
-    owns: {
-      "@type": "Organization",
-      name: businessName,
-      url: businessUrl,
-    },
-    sameAs: [
-      businessUrl,
-      "https://youtube.com/@LLTechSolutions/videos",
-      "https://www.tiktok.com/@lltechsolutions",
-      "https://www.facebook.com/profile.php?id=61557129795810",
-      "https://www.linkedin.com/in/tatebyers/",
-    ],
-  };
-
   return (
-    <html lang="en-CA" className="scroll-smooth">
-      <body className={`${inter.variable} ${inter.className} antialiased`}>
+    <html lang="en-CA">
+      <body>
+        <PWAInstaller />
         {children}
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
       </body>
     </html>
   );
