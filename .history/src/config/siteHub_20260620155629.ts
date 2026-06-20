@@ -44,22 +44,10 @@ export const linkCollections: LinkCollection[] = [
         href: "https://lltechsolutions.ca",
       },
       {
-        title: "L&L Tech Solutions Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61566540098140",
-      },
-      {
         title: "L&L TikTok",
         label: "Short Form",
         description: "Short videos, quick updates, and public content.",
         href: "https://www.tiktok.com/@lltechsolutions",
-      },
-      {
-        title: "L&L Tech YouTube",
-        label: "Video",
-        description: "Videos, uploads, project content, and future media.",
-        href: "https://www.youtube.com/@LLTechSolutions",
       },
     ],
   },
@@ -72,14 +60,7 @@ export const linkCollections: LinkCollection[] = [
     image: "/images/logos/petal-pulse.jpg",
     initials: "P&P",
     highlights: ["Calgary", "Mobile Massage", "Relaxation", "Deep Tissue"],
-    links: [
-      {
-        title: "Petal & Pulse Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61575860103999",
-      },
-    ],
+    links: [],
   },
   {
     slug: "tates-tv",
@@ -97,12 +78,6 @@ export const linkCollections: LinkCollection[] = [
         label: "Official Site",
         description: "Open the Tates TV platform.",
         href: "https://tatestv.ca",
-      },
-      {
-        title: "Tate's TV Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61591102283777",
       },
     ],
   },
@@ -131,10 +106,22 @@ export const linkCollections: LinkCollection[] = [
 
       // Replace these with your exact profile links when ready.
       {
-        title: "Tate Byers Facebook",
+        title: "Facebook",
         label: "Social",
         description: "Public posts, updates, and business activity.",
         href: "https://www.facebook.com/profile.php?id=61557129795810",
+      },
+      {
+        title: "YouTube",
+        label: "Video",
+        description: "Videos, uploads, project content, and future media.",
+        href: "https://www.youtube.com/",
+      },
+      {
+        title: "Instagram",
+        label: "Social",
+        description: "Photos, stories, updates, and public content.",
+        href: "https://www.instagram.com/",
       },
     ],
   },

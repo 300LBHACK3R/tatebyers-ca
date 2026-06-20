@@ -44,12 +44,6 @@ export const linkCollections: LinkCollection[] = [
         href: "https://lltechsolutions.ca",
       },
       {
-        title: "L&L Tech Solutions Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61566540098140",
-      },
-      {
         title: "L&L TikTok",
         label: "Short Form",
         description: "Short videos, quick updates, and public content.",
@@ -98,12 +92,6 @@ export const linkCollections: LinkCollection[] = [
         description: "Open the Tates TV platform.",
         href: "https://tatestv.ca",
       },
-      {
-        title: "Tate's TV Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61591102283777",
-      },
     ],
   },
   {
@@ -135,6 +123,12 @@ export const linkCollections: LinkCollection[] = [
         label: "Social",
         description: "Public posts, updates, and business activity.",
         href: "https://www.facebook.com/profile.php?id=61557129795810",
+      },
+      {
+        title: "Instagram",
+        label: "Social",
+        description: "Photos, stories, updates, and public content.",
+        href: "https://www.instagram.com/",
       },
     ],
   },

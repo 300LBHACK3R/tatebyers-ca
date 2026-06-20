@@ -98,12 +98,6 @@ export const linkCollections: LinkCollection[] = [
         description: "Open the Tates TV platform.",
         href: "https://tatestv.ca",
       },
-      {
-        title: "Tate's TV Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61591102283777",
-      },
     ],
   },
   {
@@ -135,6 +129,12 @@ export const linkCollections: LinkCollection[] = [
         label: "Social",
         description: "Public posts, updates, and business activity.",
         href: "https://www.facebook.com/profile.php?id=61557129795810",
+      },
+      {
+        title: "Instagram",
+        label: "Social",
+        description: "Photos, stories, updates, and public content.",
+        href: "https://www.instagram.com/",
       },
     ],
   },
