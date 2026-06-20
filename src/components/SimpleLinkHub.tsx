@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { linkCollections, profile } from "@/config/siteHub";
 
 function ArrowIcon() {
