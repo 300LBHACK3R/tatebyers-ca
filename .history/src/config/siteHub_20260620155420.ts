@@ -92,16 +92,10 @@ export const linkCollections: LinkCollection[] = [
     highlights: ["TikTok", "Facebook", "YouTube", "Instagram"],
     links: [
       {
-        title: "Tate Byers TikTok",
+        title: "L&L TikTok",
         label: "Short Form",
         description: "Short videos, quick updates, and public content.",
-        href: "https://www.tiktok.com/@tatebyers_",
-      },
-      {
-        title: "The True Standard TikTok",
-        label: "Short Form",
-        description: "Short videos, quick updates, and public content.",
-        href: "https://www.tiktok.com/@thetruestandard",
+        href: "https://www.tiktok.com/@lltechsolutions",
       },
 
       // Replace these with your exact profile links when ready.
