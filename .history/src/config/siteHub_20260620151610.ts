@@ -117,7 +117,7 @@ export const linkCollections: LinkCollection[] = [
         href: "mailto:tatebyers06@gmail.com",
       },
       {
-        title: "L&L TikTok",
+        title: "TikTok",
         label: "Short Form",
         description: "Short videos, clips, quick updates, and public content.",
         href: "https://www.tiktok.com/@lltechsolutions",
