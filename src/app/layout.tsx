@@ -1,4 +1,4 @@
-﻿import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { PWAInstaller } from "@/components/PWAInstaller";
 import "./globals.css";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s | Tate Byers",
   },
   description:
-    "Premium personal hub for Tate Byers, L&L Tech Solutions, business links, creator projects, public memories, and contact information.",
+    "Premium personal hub for Tate Byers, L&L Tech Solutions, Petal & Pulse Massage, creator projects, business links, public memories, and contact information.",
   applicationName: "Tate Byers Premium Hub",
   appleWebApp: {
     capable: true,
@@ -33,7 +33,11 @@ export const metadata: Metadata = {
     "CCTV Calgary",
     "personal portfolio",
     "creator projects",
-    "Tates TV"
+    "Tates TV",
+    "Petal & Pulse Massage",
+    "Calgary massage",
+    "mobile massage Calgary",
+    "non-RMT massage Calgary"
   ],
   authors: [{ name: "Tate Byers" }],
   creator: "Tate Byers",

@@ -21,7 +21,7 @@ export type LinkCollection = {
 export const profile = {
   name: "Tate Byers",
   headline:
-    "A premium personal hub for my business, projects, links, and selected public memories.",
+    "A premium personal hub for my businesses, projects, links, and selected public memories.",
   location: "Calgary, Alberta, Canada",
   email: "tatebyers06@gmail.com",
   mainImage: "/images/profile/tate-main.jpg",
@@ -73,6 +73,37 @@ export const linkCollections: LinkCollection[] = [
     ],
   },
   {
+    slug: "petal-pulse-massage",
+    title: "Petal & Pulse Massage",
+    label: "Massage Services",
+    description:
+      "Professional non-RMT massage services in Calgary, including relaxation, deep tissue, and mobile massage options.",
+    image: "/images/logos/petal-pulse.jpg",
+    initials: "P&P",
+    primaryHref: "mailto:tatebyers06@gmail.com",
+    highlights: ["Calgary", "Mobile Massage", "Relaxation", "Deep Tissue"],
+    links: [
+      {
+        title: "Book or Inquire",
+        label: "Contact",
+        description: "Reach out to ask about availability, services, and booking options.",
+        href: "mailto:tatebyers06@gmail.com",
+      },
+      {
+        title: "Facebook",
+        label: "Social",
+        description: "Petal & Pulse updates, availability, posts, and service information.",
+        href: "https://www.facebook.com/",
+      },
+      {
+        title: "TikTok",
+        label: "Short Form",
+        description: "Massage content, updates, behind-the-scenes clips, and service posts.",
+        href: "https://www.tiktok.com/",
+      }
+    ],
+  },
+  {
     slug: "tates-tv",
     title: "Tates TV",
     label: "Creator Project",
@@ -80,11 +111,12 @@ export const linkCollections: LinkCollection[] = [
       "A custom live-TV style web platform with channels, guide systems, themes, uploads, and media controls.",
     image: "/images/logos/tates-tv.jpg",
     initials: "TTV",
+    primaryHref: "https://tatestv.ca",
     highlights: ["Live TV UI", "Channels", "Retro Media", "Web App"],
     links: [
       {
-        title: "Tates TV Website",
-        label: "Website",
+        title: "Website",
+        label: "Official Site",
         description: "Open the Tates TV platform.",
         href: "https://tatestv.ca",
       },
