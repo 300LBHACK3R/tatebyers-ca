@@ -1,4 +1,4 @@
-﻿export type HubLink = {
+export type HubLink = {
   title: string;
   description: string;
   href: string;
@@ -136,6 +136,7 @@ export const linkCollections: LinkCollection[] = [
       "Fast access to my contact information, public profiles, and social platforms.",
     image: "/images/logos/socials-contact.jpg",
     initials: "@",
+    primaryHref: "mailto:tatebyers06@gmail.com",
     highlights: ["Email", "Socials", "Profiles", "Contact"],
     links: [
       {
