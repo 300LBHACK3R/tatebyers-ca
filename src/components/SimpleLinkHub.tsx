@@ -1,15 +1,21 @@
-import Link from "next/link";
-import { linkCollections, profile } from "@/config/siteHub";
+﻿import { linkCollections, profile } from "@/config/siteHub";
+
+type LinkCollection = (typeof linkCollections)[number];
 
 function ArrowIcon() {
   return (
-    <svg aria-hidden="true" className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none">
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5 shrink-0"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
       <path
         d="M7 17L17 7M17 7H8M17 7V16"
         stroke="currentColor"
-        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="2.2"
       />
     </svg>
   );
@@ -17,16 +23,54 @@ function ArrowIcon() {
 
 function ExternalIcon() {
   return (
-    <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none">
+    <svg
+      aria-hidden="true"
+      className="h-4 w-4 shrink-0"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
       <path
         d="M7 17L17 7M17 7H9M17 7V15"
         stroke="currentColor"
-        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="2.2"
       />
     </svg>
   );
+}
+
+function isExternalHref(href: string) {
+  return href.startsWith("http://") || href.startsWith("https://");
+}
+
+function getLinkProps(href: string) {
+  if (!isExternalHref(href)) {
+    return {};
+  }
+
+  return {
+    target: "_blank",
+    rel: "noreferrer",
+  };
+}
+
+function getCollectionHref(collection: LinkCollection) {
+  return collection.primaryHref ?? collection.links[0]?.href ?? "mailto:tatebyers06@gmail.com";
+}
+
+function getPrimaryButtonLabel(collection: LinkCollection) {
+  const primaryHref = getCollectionHref(collection);
+
+  if (primaryHref.startsWith("mailto:")) {
+    return "Contact";
+  }
+
+  const websiteLink = collection.links.find((link) =>
+    link.title.toLowerCase().includes("website"),
+  );
+
+  return websiteLink ? "Website" : "Open";
 }
 
 function VisualTile({
@@ -48,6 +92,7 @@ function VisualTile({
       ].join(" ")}
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.86),transparent_40%,rgba(255,255,255,0.22))]" />
+
       {image ? (
         <img
           src={image}
@@ -77,25 +122,108 @@ function SectionLabel({
       <p className="text-xs font-black uppercase tracking-[0.26em] text-[#ff5b66]">
         {eyebrow}
       </p>
+
       <h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-3xl">
         {title}
       </h2>
+
       {body ? <p className="mt-2 max-w-2xl text-sm leading-7 text-white/64">{body}</p> : null}
     </div>
   );
 }
 
+function BrandCard({ collection }: { collection: LinkCollection }) {
+  const href = getCollectionHref(collection);
+  const primaryButtonLabel = getPrimaryButtonLabel(collection);
+  const secondaryLinks = collection.links.filter((link) => link.href !== href);
+
+  return (
+    <div className="electric-card rounded-[2rem] p-[1px]">
+      <article className="flex h-full flex-col rounded-[1.95rem] border border-white/8 bg-gradient-to-br from-white via-[#fffaf0] to-[#f0f0f0] p-5 text-[#101010] shadow-[0_30px_70px_rgba(0,0,0,0.36)] sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="transition hover:scale-[1.03]"
+            aria-label={`Open ${collection.title}`}
+          >
+            <VisualTile
+              title={collection.title}
+              image={collection.image}
+              initials={collection.initials}
+            />
+          </a>
+
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#b70f1b] text-white shadow-[0_16px_35px_rgba(183,15,27,0.35)] transition hover:scale-105 hover:bg-[#111111]"
+            aria-label={`Open ${collection.title}`}
+          >
+            <ArrowIcon />
+          </a>
+        </div>
+
+        <div className="mt-5 min-w-0 flex-1">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#b70f1b]">
+            {collection.label}
+          </p>
+
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b]"
+          >
+            {collection.title}
+            <ExternalIcon />
+          </a>
+
+          <p className="mt-3 text-sm leading-7 text-[#333333] sm:text-base">
+            {collection.description}
+          </p>
+
+          {collection.highlights && collection.highlights.length > 0 ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {collection.highlights.map((tag) => (
+                <span
+                  key={`${collection.slug}-${tag}`}
+                  className="rounded-full border border-[#b70f1b]/15 bg-[#fff1f2] px-3 py-1.5 text-xs font-black text-[#b70f1b]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-2">
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(183,15,27,0.32)] transition hover:-translate-y-0.5 hover:bg-[#111111]"
+          >
+            {primaryButtonLabel}
+            <ExternalIcon />
+          </a>
+
+          {secondaryLinks.slice(0, 4).map((link) => (
+            <a
+              key={`${collection.slug}-${link.title}`}
+              href={link.href}
+              {...getLinkProps(link.href)}
+              className="inline-flex items-center gap-2 rounded-2xl border border-[#b70f1b]/20 bg-white px-4 py-3 text-sm font-black text-[#b70f1b] shadow-sm transition hover:-translate-y-0.5 hover:border-[#d4af37]/40 hover:bg-[#fff7e0] hover:text-[#7a0a12]"
+            >
+              {link.title}
+              <ExternalIcon />
+            </a>
+          ))}
+        </div>
+      </article>
+    </div>
+  );
+}
+
 export function SimpleLinkHub() {
-  const featured = linkCollections.find((collection) => collection.featured) ?? linkCollections[0];
-  const secondaryCollections = linkCollections.filter(
-    (collection) => collection.slug !== featured.slug,
-  );
-
-  const featuredWebsite = featured.links.find((link) => link.title.toLowerCase().includes("website"));
-  const featuredSocialLinks = featured.links.filter((link) =>
-    ["youtube", "tiktok", "facebook"].includes(link.title.toLowerCase()),
-  );
-
   return (
     <main className="min-h-screen overflow-hidden bg-[#050505] text-white">
       <div className="pointer-events-none fixed inset-0">
@@ -112,7 +240,12 @@ export function SimpleLinkHub() {
             <div className="flex justify-center">
               <div className="electric-card rounded-[2.35rem] p-[1px]">
                 <div className="rounded-[2.3rem] bg-black/70 p-2">
-                  <VisualTile title={profile.name} image={profile.mainImage} initials="TB" large />
+                  <VisualTile
+                    title={profile.name}
+                    image={profile.mainImage}
+                    initials="TB"
+                    large
+                  />
                 </div>
               </div>
             </div>
@@ -132,144 +265,23 @@ export function SimpleLinkHub() {
 
           <section className="mt-12">
             <SectionLabel
-              eyebrow="Featured"
-              title="Main Business"
-              body="The primary brand for professional technology services."
+              eyebrow="Businesses & Projects"
+              title="Everything Connected to Tate"
+              body="A clean place to find my active businesses, creative projects, socials, and contact links."
             />
 
-            <div className="electric-card rounded-[2rem] p-[1px]">
-              <article className="rounded-[1.95rem] border border-white/8 bg-gradient-to-br from-white via-[#fffaf0] to-[#f0f0f0] p-5 text-[#101010] shadow-[0_30px_70px_rgba(0,0,0,0.36)] sm:p-6">
-                <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-                  <a
-                    href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="transition hover:scale-[1.03]"
-                    aria-label={`Open ${featured.title}`}
-                  >
-                    <VisualTile title={featured.title} image={featured.image} initials={featured.initials} />
-                  </a>
-
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-[#b70f1b]">
-                      {featured.label}
-                    </p>
-
-                    <a
-                      href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b] sm:text-4xl"
-                    >
-                      {featured.title}
-                      <ExternalIcon />
-                    </a>
-
-                    <p className="mt-3 text-sm leading-7 text-[#333333] sm:text-base">
-                      {featured.description}
-                    </p>
-
-                    {featured.highlights && featured.highlights.length > 0 ? (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {featured.highlights.map((tag) => (
-                          <span
-                            key={`${featured.slug}-${tag}`}
-                            className="rounded-full border border-[#b70f1b]/15 bg-[#fff1f2] px-3 py-1.5 text-xs font-black text-[#b70f1b]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <a
-                        href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(183,15,27,0.32)] transition hover:-translate-y-0.5 hover:bg-[#111111]"
-                      >
-                        Website
-                        <ExternalIcon />
-                      </a>
-
-                      {featuredSocialLinks.map((link) => (
-                        <a
-                          key={`${featured.slug}-${link.title}`}
-                          href={link.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-2xl border border-[#b70f1b]/20 bg-white px-4 py-3 text-sm font-black text-[#b70f1b] shadow-sm transition hover:-translate-y-0.5 hover:border-[#d4af37]/40 hover:bg-[#fff7e0] hover:text-[#7a0a12]"
-                        >
-                          {link.title}
-                          <ExternalIcon />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  <a
-                    href={featured.primaryHref ?? featuredWebsite?.href ?? `/links/${featured.slug}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#b70f1b] text-white shadow-[0_16px_35px_rgba(183,15,27,0.35)] transition hover:scale-105 hover:bg-[#111111]"
-                    aria-label={`Open ${featured.title} website`}
-                  >
-                    <ArrowIcon />
-                  </a>
-                </div>
-              </article>
+            <div className="grid gap-5 lg:grid-cols-2">
+              {linkCollections.map((collection) => (
+                <BrandCard key={collection.slug} collection={collection} />
+              ))}
             </div>
           </section>
-
-          {secondaryCollections.length > 0 ? (
-            <section className="mt-10">
-              <SectionLabel
-                eyebrow="Explore"
-                title="More from Tate"
-                body="A simple place to find the other active links connected to my work and public projects."
-              />
-
-              <div className="grid gap-4 md:grid-cols-2">
-                {secondaryCollections.map((collection) => (
-                  <Link
-                    key={collection.slug}
-                    href={`/links/${collection.slug}`}
-                    className="electric-card group rounded-[1.8rem] p-[1px]"
-                  >
-                    <div className="flex h-full items-center justify-between gap-4 rounded-[1.75rem] bg-[#090909]/94 p-5 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl transition group-hover:bg-[#101010]">
-                      <div className="flex min-w-0 items-center gap-4">
-                        <VisualTile title={collection.title} image={collection.image} initials={collection.initials} />
-
-                        <div className="min-w-0">
-                          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff5b66]">
-                            {collection.label}
-                          </p>
-
-                          <h3 className="mt-1 text-xl font-black leading-tight text-white">
-                            {collection.title}
-                          </h3>
-
-                          <p className="mt-2 text-sm leading-7 text-white/68">
-                            {collection.description}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/8 text-white transition group-hover:scale-105 group-hover:bg-[#b70f1b]">
-                        <ArrowIcon />
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ) : null}
 
           <footer className="py-12 text-center text-sm leading-7 text-white/48">
             <p>
               © 2026 Tate Byers. Premium personal hub for business, projects, links, and selected memories.
             </p>
+
             <p className="mt-2">
               Maintained and developed by{" "}
               <a
