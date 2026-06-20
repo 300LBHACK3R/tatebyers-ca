@@ -136,45 +136,33 @@ function SectionLabel({
 function BrandCard({ collection }: { collection: LinkCollection }) {
   const href = getCollectionHref(collection);
   const primaryButtonLabel = getPrimaryButtonLabel(collection);
-  const secondaryLinks = href
-    ? collection.links.filter((link) => link.href !== href)
-    : collection.links;
+  const secondaryLinks = collection.links.filter((link) => link.href !== href);
 
   return (
     <div className="electric-card rounded-[2rem] p-[1px]">
       <article className="flex h-full flex-col rounded-[1.95rem] border border-white/8 bg-gradient-to-br from-white via-[#fffaf0] to-[#f0f0f0] p-5 text-[#101010] shadow-[0_30px_70px_rgba(0,0,0,0.36)] sm:p-6">
         <div className="flex items-start justify-between gap-4">
-          {href ? (
-            <a
-              href={href}
-              {...getLinkProps(href)}
-              className="transition hover:scale-[1.03]"
-              aria-label={`Open ${collection.title}`}
-            >
-              <VisualTile
-                title={collection.title}
-                image={collection.image}
-                initials={collection.initials}
-              />
-            </a>
-          ) : (
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="transition hover:scale-[1.03]"
+            aria-label={`Open ${collection.title}`}
+          >
             <VisualTile
               title={collection.title}
               image={collection.image}
               initials={collection.initials}
             />
-          )}
+          </a>
 
-          {href ? (
-            <a
-              href={href}
-              {...getLinkProps(href)}
-              className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#b70f1b] text-white shadow-[0_16px_35px_rgba(183,15,27,0.35)] transition hover:scale-105 hover:bg-[#111111]"
-              aria-label={`Open ${collection.title}`}
-            >
-              <ArrowIcon />
-            </a>
-          ) : null}
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#b70f1b] text-white shadow-[0_16px_35px_rgba(183,15,27,0.35)] transition hover:scale-105 hover:bg-[#111111]"
+            aria-label={`Open ${collection.title}`}
+          >
+            <ArrowIcon />
+          </a>
         </div>
 
         <div className="mt-5 min-w-0 flex-1">
@@ -182,20 +170,14 @@ function BrandCard({ collection }: { collection: LinkCollection }) {
             {collection.label}
           </p>
 
-          {href ? (
-            <a
-              href={href}
-              {...getLinkProps(href)}
-              className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b]"
-            >
-              {collection.title}
-              <ExternalIcon />
-            </a>
-          ) : (
-            <h3 className="mt-2 text-3xl font-black leading-tight text-[#111111]">
-              {collection.title}
-            </h3>
-          )}
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight text-[#111111] transition hover:text-[#b70f1b]"
+          >
+            {collection.title}
+            <ExternalIcon />
+          </a>
 
           <p className="mt-3 text-sm leading-7 text-[#333333] sm:text-base">
             {collection.description}
@@ -215,32 +197,28 @@ function BrandCard({ collection }: { collection: LinkCollection }) {
           ) : null}
         </div>
 
-        {href || secondaryLinks.length > 0 ? (
-          <div className="mt-6 flex flex-wrap gap-2">
-            {href ? (
-              <a
-                href={href}
-                {...getLinkProps(href)}
-                className="inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(183,15,27,0.32)] transition hover:-translate-y-0.5 hover:bg-[#111111]"
-              >
-                {primaryButtonLabel}
-                <ExternalIcon />
-              </a>
-            ) : null}
+        <div className="mt-6 flex flex-wrap gap-2">
+          <a
+            href={href}
+            {...getLinkProps(href)}
+            className="inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-4 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(183,15,27,0.32)] transition hover:-translate-y-0.5 hover:bg-[#111111]"
+          >
+            {primaryButtonLabel}
+            <ExternalIcon />
+          </a>
 
-            {secondaryLinks.slice(0, 4).map((link) => (
-              <a
-                key={`${collection.slug}-${link.title}`}
-                href={link.href}
-                {...getLinkProps(link.href)}
-                className="inline-flex items-center gap-2 rounded-2xl border border-[#b70f1b]/20 bg-white px-4 py-3 text-sm font-black text-[#b70f1b] shadow-sm transition hover:-translate-y-0.5 hover:border-[#d4af37]/40 hover:bg-[#fff7e0] hover:text-[#7a0a12]"
-              >
-                {link.title}
-                <ExternalIcon />
-              </a>
-            ))}
-          </div>
-        ) : null}
+          {secondaryLinks.slice(0, 4).map((link) => (
+            <a
+              key={`${collection.slug}-${link.title}`}
+              href={link.href}
+              {...getLinkProps(link.href)}
+              className="inline-flex items-center gap-2 rounded-2xl border border-[#b70f1b]/20 bg-white px-4 py-3 text-sm font-black text-[#b70f1b] shadow-sm transition hover:-translate-y-0.5 hover:border-[#d4af37]/40 hover:bg-[#fff7e0] hover:text-[#7a0a12]"
+            >
+              {link.title}
+              <ExternalIcon />
+            </a>
+          ))}
+        </div>
       </article>
     </div>
   );
@@ -290,7 +268,7 @@ export function SimpleLinkHub() {
             <SectionLabel
               eyebrow="Businesses & Projects"
               title="Everything Connected to Tate"
-              body="A clean place to find my active businesses, creative projects, and public socials."
+              body="A clean place to find my active businesses, creative projects, socials, and contact links."
             />
 
             <div className="grid gap-5 lg:grid-cols-2">
