@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "tatebyers-hub-v1";
+﻿const CACHE_NAME = "tatebyers-hub-v2";
 const CORE_ASSETS = [
   "/",
   "/manifest.webmanifest"
@@ -35,3 +35,4 @@ self.addEventListener("fetch", (event) => {
       .catch(() => caches.match(request).then((cached) => cached || caches.match("/")))
   );
 });
+

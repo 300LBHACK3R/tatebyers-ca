@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { PWAInstaller } from "@/components/PWAInstaller";
@@ -7,65 +7,95 @@ import "./globals.css";
 
 const siteUrl = "https://www.tatebyers.ca";
 const siteName = "Tate Byers";
-const siteTitle = "Tate Byers | Businesses, Projects & Contact";
+const siteTitle = "Tate Byers | L&L Tech Solutions & Client Website Work";
 const siteDescription =
-  "The official personal hub for Tate Byers in Calgary, featuring L&L Tech Solutions, Petal & Pulse Massage, Tates TV, business links, creator projects, contact information, and selected public memories.";
+  "The official personal hub for Tate Byers, founder of L&L Tech Solutions and creator of Tates TV, featuring owned brands, social links, and selected client websites including Crestline Painting and Tow-N-Go Trailers.";
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Tate Byers",
-    url: siteUrl,
-    email: "mailto:tatebyers06@gmail.com",
-    image: `${siteUrl}/images/profile/tate-main.jpg`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Calgary",
-      addressRegion: "Alberta",
-      addressCountry: "CA",
-    },
-    sameAs: [
-      "https://lltechsolutions.ca",
-      "https://tatestv.ca",
-      "https://www.tiktok.com/@tatebyers06",
-    ],
-    owns: [
-      {
-        "@type": "Organization",
-        name: "L&L Tech Solutions",
-        url: "https://lltechsolutions.ca",
-      },
-      {
-        "@type": "LocalBusiness",
-        name: "Petal & Pulse Massage",
-        areaServed: "Calgary, Alberta, Canada",
-        description:
-          "Professional non-RMT massage services in Calgary, including relaxation, deep tissue, sensory flow, and mobile massage options.",
-      },
-      {
-        "@type": "WebApplication",
-        name: "Tates TV",
-        url: "https://tatestv.ca",
-        applicationCategory: "EntertainmentApplication",
-      },
-    ],
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteName,
-    url: siteUrl,
-    inLanguage: "en-CA",
-    description: siteDescription,
-    publisher: {
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "Person",
+      "@id": `${siteUrl}/#person`,
       name: "Tate Byers",
+      url: siteUrl,
+      image: `${siteUrl}/images/profile/tate-main.jpg`,
+      jobTitle: "Founder of L&L Tech Solutions",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Calgary",
+        addressRegion: "Alberta",
+        addressCountry: "CA",
+      },
+      sameAs: [
+        "https://lltechsolutions.ca",
+        "https://www.tatestv.ca",
+        "https://www.linkedin.com/in/tatebyers/",
+        "https://www.youtube.com/@Tate-byers/videos",
+        "https://www.facebook.com/profile.php?id=61557129795810",
+        "https://www.tiktok.com/@lltechsolutions",
+      ],
     },
-  },
-];
+    {
+      "@type": "Organization",
+      "@id": "https://lltechsolutions.ca/#organization",
+      name: "L&L Tech Solutions",
+      url: "https://lltechsolutions.ca",
+      founder: {
+        "@id": `${siteUrl}/#person`,
+      },
+      description:
+        "Custom websites, technical support, networking, CCTV, troubleshooting, and technology services.",
+      areaServed: {
+        "@type": "Country",
+        name: "Canada",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      name: siteName,
+      url: siteUrl,
+      description: siteDescription,
+      inLanguage: "en-CA",
+      publisher: {
+        "@id": `${siteUrl}/#person`,
+      },
+    },
+    {
+      "@type": "ItemList",
+      name: "Selected websites built by L&L Tech Solutions",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          item: {
+            "@type": "WebSite",
+            name: "Crestline Painting Ltd.",
+            url: "https://www.crestlinepainting.ca",
+            creator: {
+              "@id": "https://lltechsolutions.ca/#organization",
+            },
+          },
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          item: {
+            "@type": "WebSite",
+            name: "Tow-N-Go Trailers",
+            url: "https://www.towandgotrailers.ca",
+            creator: {
+              "@id": "https://lltechsolutions.ca/#organization",
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
 
-function getStructuredDataScript() {
+function serializeStructuredData() {
   return JSON.stringify(structuredData).replace(/</g, "\\u003c");
 }
 
@@ -76,7 +106,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
-  applicationName: "Tate Byers Premium Hub",
+  applicationName: "Tate Byers",
   authors: [{ name: "Tate Byers", url: siteUrl }],
   creator: "Tate Byers",
   publisher: "L&L Tech Solutions",
@@ -89,20 +119,18 @@ export const metadata: Metadata = {
     "Tate Byers",
     "Tate Byers Calgary",
     "L&L Tech Solutions",
-    "Petal & Pulse Massage",
     "Tates TV",
-    "Calgary tech support",
+    "Calgary website developer",
     "Calgary website design",
-    "website design Calgary",
+    "custom business websites",
     "tech support Calgary",
     "networking Calgary",
     "CCTV Calgary",
-    "Calgary massage",
-    "mobile massage Calgary",
-    "non-RMT massage Calgary",
-    "personal hub",
-    "creator projects",
-    "Calgary business owner",
+    "Crestline Painting website",
+    "Tow-N-Go Trailers website",
+    "McKenzie House Massage website",
+    "Canadian web developer",
+    "client website portfolio",
   ],
   formatDetection: {
     telephone: false,
@@ -112,7 +140,6 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -124,7 +151,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "Tate Hub",
+    title: "Tate Byers",
     statusBarStyle: "black-translucent",
   },
   openGraph: {
@@ -139,7 +166,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Tate Byers Premium Hub",
+        alt: "Tate Byers, founder of L&L Tech Solutions",
       },
     ],
   },
@@ -147,7 +174,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    creator: "@tatebyers06",
     images: ["/twitter-image"],
   },
   icons: {
@@ -171,12 +197,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-  other: {
-    "mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-capable": "yes",
-    "msapplication-TileColor": "#b70f1b",
-    "theme-color": "#b70f1b",
-  },
 };
 
 export const viewport: Viewport = {
@@ -198,9 +218,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: getStructuredDataScript(),
+            __html: serializeStructuredData(),
           }}
         />
+
         <PWAInstaller />
         {children}
       </body>

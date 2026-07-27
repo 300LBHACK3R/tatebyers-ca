@@ -1,11 +1,11 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Tate Byers Premium Hub",
-    short_name: "Tate Hub",
+    name: "Tate Byers",
+    short_name: "Tate Byers",
     description:
-      "The official personal hub for Tate Byers, featuring L&L Tech Solutions, Petal & Pulse Massage, Tates TV, business links, creator projects, contact information, and selected public memories.",
+      "The official personal hub for Tate Byers, founder of L&L Tech Solutions and creator of Tates TV, featuring owned brands, client websites, and social links.",
     start_url: "/",
     scope: "/",
     display: "standalone",

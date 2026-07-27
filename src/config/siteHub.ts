@@ -1,145 +1,175 @@
-export type HubLink = {
+﻿export type HubLink = {
   title: string;
-  description: string;
   href: string;
-  label: string;
+  description: string;
 };
 
-export type LinkCollection = {
+export type OwnedBrand = {
   slug: string;
   title: string;
-  label: string;
+  eyebrow: string;
   description: string;
   image?: string;
   initials: string;
-  highlights?: string[];
-  primaryHref?: string;
+  href: string;
+  tags: string[];
   links: HubLink[];
+};
+
+export type ClientProject = {
+  slug: string;
+  title: string;
+  category: string;
+  description: string;
+  image?: string;
+  initials: string;
+  status: "Live" | "Launching Soon";
+  href?: string;
+  year: string;
 };
 
 export const profile = {
   name: "Tate Byers",
-  headline:
-    "A premium personal hub for my businesses, projects, links, and selected public memories.",
   location: "Calgary, Alberta, Canada",
-  mainImage: "/images/profile/tate-main.jpg",
+  headline:
+    "Founder of L&L Tech Solutions, creator of Tates TV, and builder of custom websites for real businesses.",
+  image: "/images/profile/tate-main.jpg",
 };
 
-export const linkCollections: LinkCollection[] = [
+export const ownedBrands: OwnedBrand[] = [
   {
     slug: "ll-tech-solutions",
     title: "L&L Tech Solutions",
-    label: "Tech Services",
+    eyebrow: "Technology Business",
     description:
-      "Website design & Development, technical support, networking, CCTV, troubleshooting, and client systems for homes and businesses.",
+      "Custom websites, technical support, networking, CCTV, troubleshooting, and dependable technology services for businesses and homeowners.",
     image: "/images/logos/ll-tech.jpg",
     initials: "L&L",
-    primaryHref: "https://lltechsolutions.ca",
-    highlights: ["Websites", "Tech Support", "Networking", "CCTV"],
+    href: "https://lltechsolutions.ca",
+    tags: ["Websites", "Tech Support", "Networking", "CCTV"],
     links: [
       {
         title: "Website",
-        label: "Official Site",
-        description: "Visit the official L&L Tech Solutions website.",
         href: "https://lltechsolutions.ca",
+        description: "Visit the official L&L Tech Solutions website.",
       },
       {
-        title: "L&L Tech Solutions Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61566540098140",
+        title: "YouTube",
+        href: "https://youtube.com/@LLTechSolutions/videos",
+        description: "Projects, tutorials, service videos, and business updates.",
       },
       {
-        title: "L&L TikTok",
-        label: "Short Form",
-        description: "Short videos, quick updates, and public content.",
+        title: "TikTok",
         href: "https://www.tiktok.com/@lltechsolutions",
+        description: "Short-form technology content and project updates.",
       },
       {
-        title: "L&L Tech YouTube",
-        label: "Video",
-        description: "Videos, uploads, project content, and future media.",
-        href: "https://www.youtube.com/@LLTechSolutions",
+        title: "Facebook",
+        href: "https://www.facebook.com/profile.php?id=61557129795810",
+        description: "Business posts, updates, local work, and public activity.",
       },
     ],
   },
   {
-    slug: "petal-pulse-massage",
-    title: "Petal & Pulse Massage",
-    label: "Massage Services",
+    slug: "tatebyers-ca",
+    title: "TateByers.ca",
+    eyebrow: "Personal Brand",
     description:
-      "Professional non-RMT massage services in Calgary, including relaxation, deep tissue, sensory flow, and mobile massage options.",
-    image: "/images/logos/petal-pulse.jpg",
-    initials: "P&P",
-    highlights: ["Calgary", "Mobile Massage", "Relaxation", "Deep Tissue"],
+      "My official online home for businesses, projects, selected client work, public links, and everything I am building next.",
+    image: "/images/logos/tatebyers.jpg",
+    initials: "TB",
+    href: "https://www.tatebyers.ca",
+    tags: ["Personal Hub", "Portfolio", "Businesses", "Client Work"],
     links: [
       {
-        title: "Petal & Pulse Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61575860103999",
+        title: "Website",
+        href: "https://www.tatebyers.ca",
+        description: "Open the official Tate Byers personal hub.",
       },
     ],
   },
   {
     slug: "tates-tv",
     title: "Tates TV",
-    label: "Creator Project",
+    eyebrow: "Creator Platform",
     description:
-      "A custom live-TV style web platform with channels, guide systems, themes, uploads, and media controls.",
+      "A custom live-TV style platform with channels, guide systems, themed experiences, original uploads, and creator-controlled media.",
     image: "/images/logos/tates-tv.jpg",
     initials: "TTV",
-    primaryHref: "https://tatestv.ca",
-    highlights: ["Live TV UI", "Channels", "Retro Media", "Web App"],
+    href: "https://www.tatestv.ca",
+    tags: ["Live TV UI", "Channels", "Original Media", "Web Platform"],
     links: [
       {
         title: "Website",
-        label: "Official Site",
-        description: "Open the Tates TV platform.",
-        href: "https://tatestv.ca",
-      },
-      {
-        title: "Tate's TV Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61591102283777",
-      },
-    ],
-  },
-  {
-    slug: "social-links",
-    title: "Social Links",
-    label: "Social Links",
-    description:
-      "All of my public social platforms, creator updates, business activity, short-form posts, and behind-the-scenes content.",
-    initials: "@",
-    primaryHref: "https://www.tiktok.com/@tatebyers06",
-    highlights: ["TikTok", "Facebook", "YouTube", "Instagram"],
-    links: [
-      {
-        title: "Tate Byers TikTok",
-        label: "Short Form",
-        description: "Short videos, quick updates, and public content.",
-        href: "https://www.tiktok.com/@tatebyers_",
-      },
-      {
-        title: "The True Standard TikTok",
-        label: "Short Form",
-        description: "Short videos, quick updates, and public content.",
-        href: "https://www.tiktok.com/@thetruestandard",
-      },
-
-      // Replace these with your exact profile links when ready.
-      {
-        title: "Tate Byers Facebook",
-        label: "Social",
-        description: "Public posts, updates, and business activity.",
-        href: "https://www.facebook.com/profile.php?id=61557129795810",
+        href: "https://www.tatestv.ca",
+        description: "Open the official Tates TV platform.",
       },
     ],
   },
 ];
 
-export function getCollectionBySlug(slug: string) {
-  return linkCollections.find((collection) => collection.slug === slug);
-}
+export const clientProjects: ClientProject[] = [
+  {
+    slug: "crestline-painting",
+    title: "Crestline Painting Ltd.",
+    category: "Painting Contractor Website",
+    description:
+      "A professional website for a British Columbia painting company serving commercial, multi-family, strata, custom-home, and interior painting projects.",
+    image: "/images/client-work/crestline-painting.jpg",
+    initials: "CP",
+    status: "Live",
+    href: "https://www.crestlinepainting.ca",
+    year: "2026",
+  },
+  {
+    slug: "tow-n-go-trailers",
+    title: "Tow-N-Go Trailers",
+    category: "Trailer Rental Website",
+    description:
+      "A clean, modern website built to present trailer rentals, services, available inventory, and future business growth clearly.",
+    image: "/images/client-work/tow-n-go-trailers.jpg",
+    initials: "TNG",
+    status: "Live",
+    href: "https://www.towandgotrailers.ca",
+    year: "2026",
+  },
+  {
+    slug: "mckenzie-house-massage",
+    title: "McKenzie House Massage",
+    category: "Massage Brand & Booking Website",
+    description:
+      "Heather's upcoming website and digital launch, including a refreshed brand direction, booking integration, photography, video, local SEO, and Google launch support.",
+    image: "/images/client-work/mckenzie-house-massage.jpg",
+    initials: "MHM",
+    status: "Launching Soon",
+    year: "2026",
+  },
+];
+
+export const socialLinks: HubLink[] = [
+  {
+    title: "LinkedIn",
+    href: "https://www.linkedin.com/in/tatebyers/",
+    description: "Professional projects, business activity, and career updates.",
+  },
+  {
+    title: "Tate YouTube",
+    href: "https://www.youtube.com/@Tate-byers/videos",
+    description: "Personal videos, creator content, and project uploads.",
+  },
+  {
+    title: "L&L YouTube",
+    href: "https://youtube.com/@LLTechSolutions/videos",
+    description: "Technology projects, tutorials, and business content.",
+  },
+  {
+    title: "TikTok",
+    href: "https://www.tiktok.com/@lltechsolutions",
+    description: "Short-form content, updates, and behind-the-scenes work.",
+  },
+  {
+    title: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61557129795810",
+    description: "Public posts, business updates, and local activity.",
+  },
+];
