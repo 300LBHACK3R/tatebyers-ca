@@ -28,12 +28,25 @@ export type ClientProject = {
   year: string;
 };
 
+export type ConceptBuild = {
+  slug: string;
+  title: string;
+  industry: string;
+  description: string;
+  image: string;
+  video?: string;
+  href?: string;
+  tags: string[];
+  year: string;
+};
+
 export const profile = {
   name: "Tate Byers",
   location: "Calgary, Alberta, Canada",
   headline:
-    "Founder of L&L Tech Solutions, creator of Tates TV, and builder of custom websites for real businesses.",
+    "Founder of L&L Tech Solutions, creator of Tates TV, and builder of custom websites and digital systems for real businesses.",
   image: "/images/profile/tate-main.jpg",
+  imagePosition: "50% 16%",
 };
 
 export const ownedBrands: OwnedBrand[] = [
@@ -56,35 +69,20 @@ export const ownedBrands: OwnedBrand[] = [
       {
         title: "YouTube",
         href: "https://youtube.com/@LLTechSolutions/videos",
-        description: "Projects, tutorials, service videos, and business updates.",
+        description:
+          "Technology projects, tutorials, service videos, and business updates.",
       },
       {
         title: "TikTok",
         href: "https://www.tiktok.com/@lltechsolutions",
-        description: "Short-form technology content and project updates.",
+        description:
+          "Short-form technology content and project updates.",
       },
       {
         title: "Facebook",
         href: "https://www.facebook.com/profile.php?id=61557129795810",
-        description: "Business posts, updates, local work, and public activity.",
-      },
-    ],
-  },
-  {
-    slug: "tatebyers-ca",
-    title: "TateByers.ca",
-    eyebrow: "Personal Brand",
-    description:
-      "My official online home for businesses, projects, selected client work, public links, and everything I am building next.",
-    image: "/images/logos/tatebyers.jpg",
-    initials: "TB",
-    href: "https://www.tatebyers.ca",
-    tags: ["Personal Hub", "Portfolio", "Businesses", "Client Work"],
-    links: [
-      {
-        title: "Website",
-        href: "https://www.tatebyers.ca",
-        description: "Open the official Tate Byers personal hub.",
+        description:
+          "Business posts, local work, service updates, and public activity.",
       },
     ],
   },
@@ -138,7 +136,7 @@ export const clientProjects: ClientProject[] = [
     title: "McKenzie House Massage",
     category: "Massage Brand & Booking Website",
     description:
-      "Heather's upcoming website and digital launch, including a refreshed brand direction, booking integration, photography, video, local SEO, and Google launch support.",
+      "Heather's upcoming website and digital launch, including refreshed branding, booking integration, photography, video, local SEO, and Google launch support.",
     image: "/images/client-work/mckenzie-house-massage.jpg",
     initials: "MHM",
     status: "Launching Soon",
@@ -146,30 +144,43 @@ export const clientProjects: ClientProject[] = [
   },
 ];
 
+/*
+ * Add only real concept work here.
+ *
+ * Concept builds are displayed separately from commissioned client work so
+ * visitors always understand which projects were independent portfolio demos.
+ */
+export const conceptBuilds: ConceptBuild[] = [];
+
 export const socialLinks: HubLink[] = [
   {
     title: "LinkedIn",
     href: "https://www.linkedin.com/in/tatebyers/",
-    description: "Professional projects, business activity, and career updates.",
+    description:
+      "Professional projects, business activity, and career updates.",
   },
   {
     title: "Tate YouTube",
     href: "https://www.youtube.com/@Tate-byers/videos",
-    description: "Personal videos, creator content, and project uploads.",
+    description:
+      "Personal videos, creator content, and project uploads.",
   },
   {
     title: "L&L YouTube",
     href: "https://youtube.com/@LLTechSolutions/videos",
-    description: "Technology projects, tutorials, and business content.",
+    description:
+      "Technology projects, tutorials, and business content.",
   },
   {
     title: "TikTok",
     href: "https://www.tiktok.com/@lltechsolutions",
-    description: "Short-form content, updates, and behind-the-scenes work.",
+    description:
+      "Short-form content, updates, and behind-the-scenes work.",
   },
   {
     title: "Facebook",
     href: "https://www.facebook.com/profile.php?id=61557129795810",
-    description: "Public posts, business updates, and local activity.",
+    description:
+      "Public posts, business updates, and local activity.",
   },
 ];

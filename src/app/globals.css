@@ -4,16 +4,19 @@
   --background: #050505;
   --foreground: #ffffff;
 
-  --red: #b70f1b;
-  --red-bright: #ff2437;
-  --red-soft: #ff6b74;
+  --black: #050505;
+  --black-soft: #0b0b0b;
+  --black-panel: #101010;
 
   --gold: #d4af37;
-  --gold-soft: #f6d77b;
+  --gold-bright: #f3d77d;
+  --gold-soft: #e2bf62;
+
+  --red: #9e111b;
+  --red-bright: #c51625;
 
   --white-soft: rgba(255, 255, 255, 0.72);
-  --white-muted: rgba(255, 255, 255, 0.52);
-  --border-soft: rgba(255, 255, 255, 0.1);
+  --white-muted: rgba(255, 255, 255, 0.5);
 }
 
 * {
@@ -31,12 +34,25 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 50% -20%, rgba(183, 15, 27, 0.28), transparent 38%),
-    radial-gradient(circle at 100% 20%, rgba(255, 36, 55, 0.12), transparent 32%),
-    radial-gradient(circle at 0% 90%, rgba(212, 175, 55, 0.08), transparent 30%),
+    radial-gradient(
+      circle at 50% -15%,
+      rgba(212, 175, 55, 0.12),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 100% 25%,
+      rgba(158, 17, 27, 0.11),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 0% 90%,
+      rgba(212, 175, 55, 0.06),
+      transparent 32%
+    ),
     var(--background);
   color: var(--foreground);
   font-synthesis-weight: none;
@@ -46,7 +62,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 36, 55, 0.42);
+  background: rgba(212, 175, 55, 0.38);
   color: #ffffff;
 }
 
@@ -80,42 +96,49 @@ img {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(255, 91, 102, 0.72);
+  outline: 3px solid rgba(226, 191, 98, 0.72);
   outline-offset: 4px;
 }
 
-/* Premium animated border used by the homepage and link cards. */
+/*
+ * Animated luxury frame.
+ *
+ * The animation moves only the gradient background and opacity, keeping the
+ * effect smooth without continuously resizing or repositioning the cards.
+ */
+.luxury-frame,
 .electric-card {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   background:
     linear-gradient(
       120deg,
-      rgba(255, 255, 255, 0.24),
-      rgba(255, 255, 255, 0.06) 14%,
-      rgba(183, 15, 27, 0.78) 30%,
-      rgba(255, 91, 102, 1) 44%,
-      rgba(212, 175, 55, 0.88) 50%,
-      rgba(255, 91, 102, 0.96) 58%,
-      rgba(183, 15, 27, 0.74) 70%,
-      rgba(255, 255, 255, 0.08) 86%,
-      rgba(255, 255, 255, 0.24)
+      rgba(255, 255, 255, 0.2),
+      rgba(212, 175, 55, 0.3) 14%,
+      rgba(243, 215, 125, 0.96) 30%,
+      rgba(158, 17, 27, 0.74) 46%,
+      rgba(212, 175, 55, 0.94) 62%,
+      rgba(255, 255, 255, 0.14) 78%,
+      rgba(212, 175, 55, 0.32)
     ),
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.18),
-      rgba(255, 255, 255, 0.05)
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.03)
     );
   background-size:
-    280% 280%,
+    300% 300%,
     100% 100%;
-  animation: electric-border-flow 5.5s linear infinite;
+  animation: luxury-frame-flow 9s linear infinite;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 0 28px rgba(183, 15, 27, 0.22),
-    0 0 58px rgba(255, 36, 55, 0.12);
+    0 0 0 1px rgba(212, 175, 55, 0.08),
+    0 0 28px rgba(212, 175, 55, 0.12),
+    0 0 64px rgba(158, 17, 27, 0.08);
+  transform: translateZ(0);
 }
 
+.luxury-frame::before,
 .electric-card::before {
   content: "";
   position: absolute;
@@ -123,27 +146,58 @@ img {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 73, 88, 0.95), transparent 18%),
-    radial-gradient(circle at 80% 24%, rgba(212, 175, 55, 0.5), transparent 16%),
-    radial-gradient(circle at 32% 88%, rgba(255, 40, 58, 0.54), transparent 20%);
-  opacity: 0.36;
-  filter: blur(12px);
-  animation: electric-pulse 3.2s ease-in-out infinite alternate;
+    radial-gradient(
+      circle at 20% 12%,
+      rgba(243, 215, 125, 0.62),
+      transparent 19%
+    ),
+    radial-gradient(
+      circle at 82% 22%,
+      rgba(158, 17, 27, 0.38),
+      transparent 18%
+    ),
+    radial-gradient(
+      circle at 35% 90%,
+      rgba(212, 175, 55, 0.28),
+      transparent 22%
+    );
+  opacity: 0.3;
+  animation: luxury-frame-pulse 4.8s ease-in-out infinite alternate;
 }
 
+.luxury-frame::after,
+.electric-card::after {
+  content: "";
+  position: absolute;
+  inset: -70% -45%;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 58%
+  );
+  opacity: 0;
+  transform: translateX(-55%) rotate(12deg);
+  animation: luxury-frame-sheen 8s ease-in-out infinite;
+}
+
+.luxury-frame > *,
 .electric-card > * {
   position: relative;
   z-index: 1;
 }
 
+.luxury-frame:hover,
 .electric-card:hover {
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 0 32px rgba(255, 36, 55, 0.32),
-    0 0 78px rgba(212, 175, 55, 0.16);
+    0 0 0 1px rgba(243, 215, 125, 0.16),
+    0 0 38px rgba(212, 175, 55, 0.18),
+    0 0 82px rgba(158, 17, 27, 0.12);
 }
 
-@keyframes electric-border-flow {
+@keyframes luxury-frame-flow {
   0% {
     background-position:
       0% 50%,
@@ -152,20 +206,40 @@ img {
 
   100% {
     background-position:
-      280% 50%,
+      300% 50%,
       0 0;
   }
 }
 
-@keyframes electric-pulse {
+@keyframes luxury-frame-pulse {
   0% {
-    opacity: 0.2;
-    transform: scale(1);
+    opacity: 0.18;
   }
 
   100% {
-    opacity: 0.52;
-    transform: scale(1.025);
+    opacity: 0.42;
+  }
+}
+
+@keyframes luxury-frame-sheen {
+  0%,
+  68% {
+    opacity: 0;
+    transform: translateX(-55%) rotate(12deg);
+  }
+
+  74% {
+    opacity: 0.18;
+  }
+
+  88% {
+    opacity: 0;
+    transform: translateX(55%) rotate(12deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(55%) rotate(12deg);
   }
 }
 
@@ -189,11 +263,12 @@ img {
     transition-duration: 0.001ms !important;
   }
 
-  .electric-card {
-    animation: none;
-  }
-
-  .electric-card::before {
+  .luxury-frame,
+  .luxury-frame::before,
+  .luxury-frame::after,
+  .electric-card,
+  .electric-card::before,
+  .electric-card::after {
     animation: none;
   }
 }

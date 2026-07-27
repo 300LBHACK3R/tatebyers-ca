@@ -2,10 +2,12 @@
 
 import {
   clientProjects,
+  conceptBuilds,
   ownedBrands,
   profile,
   socialLinks,
   type ClientProject,
+  type ConceptBuild,
   type OwnedBrand,
 } from "@/config/siteHub";
 
@@ -29,12 +31,12 @@ function ArrowIcon({ small = false }: { small?: boolean }) {
 }
 
 function getAnchorProps(href: string) {
-  const isCurrentSite =
+  const staysOnCurrentSite =
     href.startsWith("/") ||
     href.startsWith("https://www.tatebyers.ca") ||
     href.startsWith("https://tatebyers.ca");
 
-  if (isCurrentSite) {
+  if (staysOnCurrentSite) {
     return {};
   }
 
@@ -46,16 +48,19 @@ function getAnchorProps(href: string) {
 
 function ProfileImage() {
   return (
-    <div className="electric-card rounded-[2.6rem] p-[1px]">
-      <div className="rounded-[2.55rem] bg-black/75 p-2">
-        <div className="relative h-36 w-36 overflow-hidden rounded-[2.15rem] bg-[#111111] sm:h-44 sm:w-44">
+    <div className="luxury-frame rounded-[2.65rem] p-[1px]">
+      <div className="rounded-[2.6rem] bg-black/85 p-2">
+        <div className="relative aspect-[4/5] w-40 overflow-hidden rounded-[2.2rem] bg-[#111111] sm:w-48">
           <Image
             src={profile.image}
             alt="Tate Byers"
             fill
             priority
-            sizes="(max-width: 640px) 144px, 176px"
+            sizes="(max-width: 640px) 160px, 192px"
             className="object-cover"
+            style={{
+              objectPosition: profile.imagePosition,
+            }}
           />
         </div>
       </div>
@@ -71,7 +76,7 @@ function BrandLogo({
   priority?: boolean;
 }) {
   return (
-    <div className="relative grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-[1.8rem] border border-black/8 bg-gradient-to-br from-white via-[#fffaf0] to-[#e4c978] p-3 shadow-[0_20px_44px_rgba(0,0,0,0.24)]">
+    <div className="relative grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-[1.8rem] border border-black/[0.08] bg-gradient-to-br from-white via-[#fffaf0] to-[#d7b958] p-3 shadow-[0_20px_44px_rgba(0,0,0,0.24)]">
       {brand.image ? (
         <div className="relative h-full w-full">
           <Image
@@ -84,7 +89,7 @@ function BrandLogo({
           />
         </div>
       ) : (
-        <span className="text-2xl font-black text-[#b70f1b]">
+        <span className="text-2xl font-black text-[#9e111b]">
           {brand.initials}
         </span>
       )}
@@ -103,7 +108,7 @@ function SectionHeading({
 }) {
   return (
     <header className="mb-6 max-w-3xl">
-      <p className="text-xs font-black uppercase tracking-[0.28em] text-[#ff6973]">
+      <p className="text-xs font-black uppercase tracking-[0.28em] text-[#e2bf62]">
         {eyebrow}
       </p>
 
@@ -111,7 +116,7 @@ function SectionHeading({
         {title}
       </h2>
 
-      <p className="mt-3 text-sm leading-7 text-white/68 sm:text-base">
+      <p className="mt-3 text-sm leading-7 text-white/[0.68] sm:text-base">
         {description}
       </p>
     </header>
@@ -126,8 +131,8 @@ function OwnedBrandCard({
   priority?: boolean;
 }) {
   return (
-    <div className="electric-card rounded-[2rem] p-[1px]">
-      <article className="flex h-full flex-col rounded-[1.95rem] bg-gradient-to-br from-white via-[#fffdf8] to-[#f1eadb] p-5 text-[#111111] shadow-[0_30px_70px_rgba(0,0,0,0.38)] sm:p-6">
+    <div className="luxury-frame rounded-[2rem] p-[1px]">
+      <article className="flex h-full flex-col rounded-[1.95rem] bg-gradient-to-br from-white via-[#fffdf8] to-[#eee3c7] p-5 text-[#111111] shadow-[0_30px_70px_rgba(0,0,0,0.38)] sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <a
             href={brand.href}
@@ -142,21 +147,21 @@ function OwnedBrandCard({
             href={brand.href}
             {...getAnchorProps(brand.href)}
             aria-label={`Open ${brand.title}`}
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#b70f1b] text-white shadow-[0_16px_34px_rgba(183,15,27,0.34)] transition hover:scale-105 hover:bg-[#111111]"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#9e111b] text-white shadow-[0_16px_34px_rgba(158,17,27,0.3)] transition hover:scale-105 hover:bg-[#111111]"
           >
             <ArrowIcon />
           </a>
         </div>
 
         <div className="mt-5 flex-1">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#b70f1b]">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#8e1119]">
             {brand.eyebrow}
           </p>
 
           <a
             href={brand.href}
             {...getAnchorProps(brand.href)}
-            className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight transition hover:text-[#b70f1b]"
+            className="mt-2 inline-flex items-center gap-3 text-3xl font-black leading-tight transition hover:text-[#9e111b]"
           >
             {brand.title}
             <ArrowIcon small />
@@ -170,7 +175,7 @@ function OwnedBrandCard({
             {brand.tags.map((tag) => (
               <span
                 key={`${brand.slug}-${tag}`}
-                className="rounded-full border border-[#b70f1b]/15 bg-[#fff1f2] px-3 py-1.5 text-xs font-black text-[#b70f1b]"
+                className="rounded-full border border-[#b28b2f]/25 bg-[#fff8e3] px-3 py-1.5 text-xs font-black text-[#76580e]"
               >
                 {tag}
               </span>
@@ -184,12 +189,12 @@ function OwnedBrandCard({
               key={`${brand.slug}-${link.title}`}
               href={link.href}
               {...getAnchorProps(link.href)}
+              title={link.description}
               className={
                 index === 0
-                  ? "inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-4 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(183,15,27,0.3)] transition hover:-translate-y-0.5 hover:bg-[#111111]"
-                  : "inline-flex items-center gap-2 rounded-2xl border border-[#b70f1b]/20 bg-white px-4 py-3 text-sm font-black text-[#b70f1b] shadow-sm transition hover:-translate-y-0.5 hover:border-[#d4af37]/50 hover:bg-[#fff7e0]"
+                  ? "inline-flex items-center gap-2 rounded-2xl bg-[#111111] px-4 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(0,0,0,0.24)] transition hover:-translate-y-0.5 hover:bg-[#9e111b]"
+                  : "inline-flex items-center gap-2 rounded-2xl border border-[#b28b2f]/30 bg-white px-4 py-3 text-sm font-black text-[#76580e] shadow-sm transition hover:-translate-y-0.5 hover:border-[#9e111b]/40 hover:bg-[#fff8e3] hover:text-[#9e111b]"
               }
-              title={link.description}
             >
               {link.title}
               <ArrowIcon small />
@@ -202,15 +207,15 @@ function OwnedBrandCard({
 }
 
 function ClientProjectCard({ project }: { project: ClientProject }) {
-  const cardContent = (
-    <article className="flex h-full flex-col overflow-hidden rounded-[1.95rem] bg-gradient-to-br from-white via-[#fffdf8] to-[#f2ece0] text-[#111111] shadow-[0_28px_62px_rgba(0,0,0,0.34)]">
-      <div className="relative aspect-[16/9] overflow-hidden bg-[#161616]">
+  const card = (
+    <article className="flex h-full flex-col overflow-hidden rounded-[1.95rem] bg-gradient-to-br from-white via-[#fffdf8] to-[#eee5d2] text-[#111111] shadow-[0_28px_62px_rgba(0,0,0,0.34)]">
+      <div className="relative aspect-[16/9] overflow-hidden bg-[#141414]">
         {project.image ? (
           <Image
             src={project.image}
             alt={`${project.title} website preview`}
             fill
-            sizes="(max-width: 1024px) 100vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover transition duration-700 group-hover:scale-[1.035]"
           />
         ) : (
@@ -219,14 +224,14 @@ function ClientProjectCard({ project }: { project: ClientProject }) {
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
 
-        <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/65 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white backdrop-blur">
+        <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white backdrop-blur">
           {project.status}
         </div>
 
         <div className="absolute bottom-4 left-4 right-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ffd4d7]">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#f3d77d]">
             L&L Tech Solutions Client Build
           </p>
 
@@ -238,25 +243,27 @@ function ClientProjectCard({ project }: { project: ClientProject }) {
 
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center justify-between gap-4">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#b70f1b]">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#8a6817]">
             {project.category}
           </p>
 
-          <span className="text-xs font-bold text-black/45">{project.year}</span>
+          <span className="text-xs font-bold text-black/[0.45]">
+            {project.year}
+          </span>
         </div>
 
         <p className="mt-4 flex-1 text-sm leading-7 text-[#444444]">
           {project.description}
         </p>
 
-        <div className="mt-5 border-t border-black/8 pt-4">
+        <div className="mt-5 border-t border-black/[0.08] pt-4">
           {project.href ? (
-            <span className="inline-flex items-center gap-2 text-sm font-black text-[#b70f1b]">
+            <span className="inline-flex items-center gap-2 text-sm font-black text-[#9e111b]">
               View Live Website
               <ArrowIcon small />
             </span>
           ) : (
-            <span className="inline-flex rounded-full bg-[#fff1f2] px-3 py-1.5 text-xs font-black text-[#b70f1b]">
+            <span className="inline-flex rounded-full bg-[#fff8e3] px-3 py-1.5 text-xs font-black text-[#76580e]">
               Launching Soon
             </span>
           )}
@@ -267,8 +274,8 @@ function ClientProjectCard({ project }: { project: ClientProject }) {
 
   if (!project.href) {
     return (
-      <div className="electric-card rounded-[2rem] p-[1px]">
-        {cardContent}
+      <div className="luxury-frame rounded-[2rem] p-[1px]">
+        {card}
       </div>
     );
   }
@@ -277,33 +284,109 @@ function ClientProjectCard({ project }: { project: ClientProject }) {
     <a
       href={project.href}
       {...getAnchorProps(project.href)}
-      className="electric-card group rounded-[2rem] p-[1px] transition hover:-translate-y-1"
+      className="luxury-frame group rounded-[2rem] p-[1px] transition hover:-translate-y-1"
       aria-label={`View ${project.title} website`}
     >
-      {cardContent}
+      {card}
     </a>
+  );
+}
+
+function ConceptBuildCard({ concept }: { concept: ConceptBuild }) {
+  return (
+    <div className="luxury-frame rounded-[2rem] p-[1px]">
+      <article className="flex h-full flex-col overflow-hidden rounded-[1.95rem] bg-[#0b0b0b] shadow-[0_28px_62px_rgba(0,0,0,0.38)]">
+        <div className="relative aspect-video overflow-hidden bg-black">
+          {concept.video ? (
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              poster={concept.image}
+              className="h-full w-full object-cover"
+              aria-label={`${concept.title} walkthrough video`}
+            >
+              <source src={concept.video} />
+            </video>
+          ) : (
+            <Image
+              src={concept.image}
+              alt={`${concept.title} concept preview`}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          )}
+
+          <div className="pointer-events-none absolute left-4 top-4 rounded-full border border-[#e2bf62]/30 bg-black/75 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#f3d77d] backdrop-blur">
+            Independent Portfolio Concept
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col p-5 text-white">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#e2bf62]">
+              {concept.industry}
+            </p>
+
+            <span className="text-xs font-bold text-white/[0.42]">
+              {concept.year}
+            </span>
+          </div>
+
+          <h3 className="mt-3 text-2xl font-black leading-tight">
+            {concept.title}
+          </h3>
+
+          <p className="mt-3 text-sm leading-7 text-white/[0.66]">
+            {concept.description}
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {concept.tags.map((tag) => (
+              <span
+                key={`${concept.slug}-${tag}`}
+                className="rounded-full border border-[#e2bf62]/20 bg-[#e2bf62]/[0.08] px-3 py-1.5 text-xs font-black text-[#f3d77d]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {concept.href ? (
+            <div className="mt-auto pt-6">
+              <a
+                href={concept.href}
+                {...getAnchorProps(concept.href)}
+                className="inline-flex items-center gap-2 rounded-2xl bg-[#9e111b] px-4 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#d7b34d] hover:text-black"
+              >
+                Open Concept
+                <ArrowIcon small />
+              </a>
+            </div>
+          ) : null}
+        </div>
+      </article>
+    </div>
   );
 }
 
 function SocialLinks() {
   return (
-    <div className="electric-card rounded-[2rem] p-[1px]">
+    <div className="luxury-frame rounded-[2rem] p-[1px]">
       <div className="rounded-[1.95rem] bg-[#090909]/96 p-5 shadow-[0_24px_58px_rgba(0,0,0,0.36)] sm:p-6">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#ff6973]">
-              Social Links
-            </p>
+        <p className="text-xs font-black uppercase tracking-[0.24em] text-[#e2bf62]">
+          Social Links
+        </p>
 
-            <h2 className="mt-2 text-2xl font-black text-white">
-              Find me across the web.
-            </h2>
+        <h2 className="mt-2 text-2xl font-black text-white">
+          Follow the work.
+        </h2>
 
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-white/65">
-              Professional updates, business content, videos, and behind-the-scenes work.
-            </p>
-          </div>
-        </div>
+        <p className="mt-2 max-w-2xl text-sm leading-7 text-white/[0.65]">
+          Professional updates, business content, project videos, and
+          behind-the-scenes work.
+        </p>
 
         <div className="mt-5 flex flex-wrap gap-3">
           {socialLinks.map((link) => (
@@ -312,7 +395,7 @@ function SocialLinks() {
               href={link.href}
               {...getAnchorProps(link.href)}
               title={link.description}
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#b70f1b] px-5 py-3 text-sm font-black text-white shadow-[0_14px_30px_rgba(183,15,27,0.28)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#b70f1b]"
+              className="inline-flex items-center gap-2 rounded-2xl border border-[#e2bf62]/30 bg-[#15120a] px-5 py-3 text-sm font-black text-[#f3d77d] shadow-[0_14px_30px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:border-[#9e111b]/50 hover:bg-[#9e111b] hover:text-white"
             >
               {link.title}
               <ArrowIcon small />
@@ -328,11 +411,11 @@ export function SimpleLinkHub() {
   return (
     <main className="min-h-screen overflow-hidden bg-[#050505] text-white">
       <div className="pointer-events-none fixed inset-0">
-        <div className="absolute left-1/2 top-[-300px] h-[680px] w-[680px] -translate-x-1/2 rounded-full bg-[#b70f1b]/42 blur-3xl" />
-        <div className="absolute right-[-220px] top-[24%] h-[520px] w-[520px] rounded-full bg-[#ff2437]/20 blur-3xl" />
-        <div className="absolute bottom-[4%] left-[-240px] h-[500px] w-[500px] rounded-full bg-[#d4af37]/10 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_31%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.92))]" />
-        <div className="absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,.65)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.65)_1px,transparent_1px)] [background-size:36px_36px]" />
+        <div className="absolute left-1/2 top-[-320px] h-[720px] w-[720px] -translate-x-1/2 rounded-full bg-[#d4af37]/[0.13] blur-3xl" />
+        <div className="absolute right-[-240px] top-[20%] h-[540px] w-[540px] rounded-full bg-[#9e111b]/[0.18] blur-3xl" />
+        <div className="absolute bottom-[4%] left-[-240px] h-[500px] w-[500px] rounded-full bg-[#d4af37]/[0.08] blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.08),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.015),rgba(0,0,0,0.94))]" />
+        <div className="absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(226,191,98,.65)_1px,transparent_1px),linear-gradient(90deg,rgba(226,191,98,.65)_1px,transparent_1px)] [background-size:38px_38px]" />
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 lg:py-16">
@@ -341,7 +424,7 @@ export function SimpleLinkHub() {
             <ProfileImage />
           </div>
 
-          <p className="mt-7 text-xs font-black uppercase tracking-[0.34em] text-white/62">
+          <p className="mt-7 text-xs font-black uppercase tracking-[0.34em] text-[#e7d39a]">
             {profile.location}
           </p>
 
@@ -349,30 +432,32 @@ export function SimpleLinkHub() {
             {profile.name}
           </h1>
 
-          <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/76 sm:text-xl">
+          <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/[0.76] sm:text-xl">
             {profile.headline}
           </p>
 
           <div className="mx-auto mt-7 flex max-w-xl flex-wrap justify-center gap-2">
-            {["Founder", "Developer", "Business Owner", "Creator"].map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white/72 backdrop-blur"
-              >
-                {item}
-              </span>
-            ))}
+            {["Founder", "Developer", "Business Owner", "Creator"].map(
+              (item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-[#e2bf62]/20 bg-[#e2bf62]/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#e7d39a]"
+                >
+                  {item}
+                </span>
+              ),
+            )}
           </div>
         </header>
 
         <section className="mt-16">
           <SectionHeading
             eyebrow="Owned & Operated"
-            title="My businesses and platforms"
-            description="These are the brands and digital platforms I own, operate, and continue to build."
+            title="My business and platform"
+            description="The brands and digital platforms I own, operate, and continue to develop."
           />
 
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-5 lg:grid-cols-2">
             {ownedBrands.map((brand, index) => (
               <OwnedBrandCard
                 key={brand.slug}
@@ -397,13 +482,30 @@ export function SimpleLinkHub() {
           </div>
         </section>
 
+        {conceptBuilds.length > 0 ? (
+          <section className="mt-16">
+            <SectionHeading
+              eyebrow="Concept Builds & Walkthroughs"
+              title="Independent portfolio concepts"
+              description="Website concepts and recorded walkthroughs created to demonstrate design, user-experience, and conversion ideas. These are independent portfolio concepts unless specifically identified as commissioned client work."
+            />
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              {conceptBuilds.map((concept) => (
+                <ConceptBuildCard key={concept.slug} concept={concept} />
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         <section className="mt-16">
           <SocialLinks />
         </section>
 
-        <footer className="py-12 text-center text-sm leading-7 text-white/48">
+        <footer className="py-12 text-center text-sm leading-7 text-white/[0.46]">
           <p>
-            © 2026 Tate Byers. Founder of L&L Tech Solutions and creator of Tates TV.
+            © 2026 Tate Byers. Founder of L&L Tech Solutions and creator of
+            Tates TV.
           </p>
 
           <p className="mt-2">
@@ -412,7 +514,7 @@ export function SimpleLinkHub() {
               href="https://lltechsolutions.ca"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-black text-[#ff6973] underline-offset-4 hover:underline"
+              className="font-black text-[#e2bf62] underline-offset-4 hover:text-white hover:underline"
             >
               L&L Tech Solutions
             </a>
